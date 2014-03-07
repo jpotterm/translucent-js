@@ -1,0 +1,25 @@
+{
+  "name": "translucent",
+  "version": "0.0.1",
+  "description": "A referentially transparent library for functional programming.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "functional"
+  ],
+  "author": "Jonathan Potter",
+  "license": "CC0",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "~3.5.5",
+    "gulp-browserify": "~0.4.6",
+    "gulp-uglify": "~0.2.1",
+    "gulp-jshint": "~1.5.0",
+    "gulp-rename": "~1.2.0"
+  }
+}
