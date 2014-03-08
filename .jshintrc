@@ -7,5 +7,15 @@
     "trailing": true,
     "undef": true,
     "unused": true,
-    "node": true
+    "node": true,
+    "globals": {
+        "describe": false,
+        "it": false,
+        "expect": false,
+        "beforeEach": false,
+        "afterEach": false,
+        "xdescribe": false,
+        "xit": false,
+        "spyOn": false
+    }
 }
