@@ -1,6 +1,7 @@
 "use strict";
 
 var tlc = require("./core.js");
+require("./functor.js");
 
 
 tlc.reduce = tlc.curry(function(f, accumulator, xs) {
@@ -20,7 +21,7 @@ tlc.reduceRight = tlc.curry(function(f, accumulator, xs) {
 });
 
 tlc.filter = tlc.curry(function(p, xs) {
-    function concatIfPasses(p, xs, y) {
+    function concatIfPasses(xs, y) {
         return p(y) ? tlc.concat(xs, [y]) : xs;
     }
 
@@ -76,14 +77,14 @@ tlc.groupBy = tlc.curry(function(eq, xs) {
 tlc.group = tlc.groupBy(tlc.op["==="]);
 
 tlc.minimum = tlc.apply(Math.min);
-tlc.maxiumum = tlc.apply(Math.max);
+tlc.maximum = tlc.apply(Math.max);
 
 tlc.sum = function(xs) {
-    return tlc.reduce(tlc.op["+"], xs, 0);
+    return tlc.reduce(tlc.op["+"], 0, xs);
 };
 
 tlc.product = function(xs) {
-    return tlc.reduce(tlc.op["*"], xs, 1);
+    return tlc.reduce(tlc.op["*"], 1, xs);
 };
 
 tlc.length = function(xs) {
@@ -108,7 +109,7 @@ tlc.transpose = function(xss) {
 
 tlc.zipWith = tlc.curry(function(f) {
     var xss = tlc.toArray(arguments).slice(1);
-    return tlc.map(f, tlc.transpose(xss));
+    return tlc.map(tlc.apply(f), tlc.transpose(xss));
 }, 3);
 
 tlc.zip = tlc.curry(function () {

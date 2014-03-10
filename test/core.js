@@ -109,7 +109,51 @@ describe("core.flip", function() {
     });
 });
 
-// TODO: test memoize
+describe("core.memoizeBy", function() {
+    it("should cache function arguments", function() {
+        function echo(x, y, z) {
+            return [x, y, z];
+        }
+
+        function constantHash() {
+            return "test";
+        }
+
+        var cached = tlc.memoizeBy(constantHash, echo);
+
+        var initialResult = cached(1, 2, 3);
+        var cachedResult = cached(4, 5, 6);
+
+        expect(initialResult[0]).toBe(1);
+        expect(initialResult[1]).toBe(2);
+        expect(initialResult[2]).toBe(3);
+
+        expect(cachedResult[0]).toBe(1);
+        expect(cachedResult[1]).toBe(2);
+        expect(cachedResult[2]).toBe(3);
+    });
+});
+
+describe("core.memoize", function() {
+    it("should cache function arguments", function() {
+        function echo(x, y, z) {
+            return [x, y, z];
+        }
+
+        var cached = tlc.memoize(echo);
+
+        var initialResult = cached(1, 2, 3);
+        var cachedResult = cached(1, 2, 3);
+
+        expect(initialResult[0]).toBe(1);
+        expect(initialResult[1]).toBe(2);
+        expect(initialResult[2]).toBe(3);
+
+        expect(cachedResult[0]).toBe(1);
+        expect(cachedResult[1]).toBe(2);
+        expect(cachedResult[2]).toBe(3);
+    });
+});
 
 describe("core.not", function() {
     it("should negate a boolean", function() {

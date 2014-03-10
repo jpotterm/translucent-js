@@ -81,7 +81,7 @@ tlc.flip = function(f) {
 	};
 };
 
-tlc.memoize = tlc.curry(function(hasher, f) {
+tlc.memoizeBy = tlc.curry(function(hasher, f) {
 	var values = {};
 
 	return function() {
@@ -96,7 +96,7 @@ tlc.memoize = tlc.curry(function(hasher, f) {
 	};
 });
 
-tlc.memoizeJson = tlc.memoize(JSON.stringify);
+tlc.memoize = tlc.memoizeBy(JSON.stringify);
 
 tlc.not = function(value) {
     return !value;
