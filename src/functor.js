@@ -1,12 +1,14 @@
+"use strict";
+
 var tlc = require("./core.js");
 
 
-tlc.fmap = function(f, xs) {
-	return tlc.callFunction(xs.constructor, "fmap", [f, xs]);
+tlc.map = function(f, functor) {
+	return tlc.callFunction(functor.constructor, "map", [f, functor]);
 };
 
 tlc.addInstance(Array, {
-    fmap: function(f, xs) {
+    map: function(f, xs) {
        var ys = new Array(xs.length);
 
        for (var i = 0; i < xs.length; ++i) {
