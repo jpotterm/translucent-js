@@ -5,20 +5,16 @@ var tlc = _dereq_("./core.js");
 _dereq_("./functor.js");
 
 
-tlc.reduce = tlc.curry(function(f, accumulator, xs) {
-    for (var i = 0; i < xs.length; ++i) {
-        accumulator = f(accumulator, xs[i]);
-    }
+tlc.addInstance(Array, {
+    map: function(f, xs) {
+       var ys = new Array(xs.length);
 
-    return accumulator;
-});
+       for (var i = 0; i < xs.length; ++i) {
+           ys[i] = f(xs[i]);
+       }
 
-tlc.reduceRight = tlc.curry(function(f, accumulator, xs) {
-    for (var i = xs.length - 1; i >= 0; --i) {
-        accumulator = f(xs[i], accumulator);
-    }
-
-    return accumulator;
+       return ys;
+   }
 });
 
 tlc.filter = tlc.curry(function(p, xs) {
@@ -282,6 +278,22 @@ tlc.reverse = function(xs) {
 	return tlc.cloneArray(xs).reverse();
 };
 
+tlc.reduce = tlc.curry(function(f, accumulator, xs) {
+    for (var i = 0; i < xs.length; ++i) {
+        accumulator = f(accumulator, xs[i]);
+    }
+
+    return accumulator;
+});
+
+tlc.reduceRight = tlc.curry(function(f, accumulator, xs) {
+    for (var i = xs.length - 1; i >= 0; --i) {
+        accumulator = f(xs[i], accumulator);
+    }
+
+    return accumulator;
+});
+
 tlc.pipeline = function() {
 	var functions = tlc.toArray(arguments);
 
@@ -411,29 +423,90 @@ module.exports = tlc;
 
 module.exports = _dereq_("./core.js");
 _dereq_("./functor.js");
+_dereq_("./monad.js");
 _dereq_("./array.js");
 
-},{"./array.js":1,"./core.js":2,"./functor.js":4}],4:[function(_dereq_,module,exports){
+},{"./array.js":1,"./core.js":2,"./functor.js":4,"./monad.js":5}],4:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("./core.js");
 
 
 tlc.map = function(f, functor) {
-	return tlc.callFunction(functor.constructor, "map", [f, functor]);
+	return tlc.callFunction(functor.constructor, "map", arguments);
 };
 
-tlc.addInstance(Array, {
-    map: function(f, xs) {
-       var ys = new Array(xs.length);
 
-       for (var i = 0; i < xs.length; ++i) {
-           ys[i] = f(xs[i]);
-       }
+module.exports = tlc;
 
-       return ys;
-   }
-});
+},{"./core.js":2}],5:[function(_dereq_,module,exports){
+"use strict";
+
+var tlc = _dereq_("./core.js");
+
+
+tlc.unit = function(type, value) {
+    return tlc.callFunction(type, "unit", [value]);
+};
+
+tlc.bind = function(monad) {
+    var functions = tlc.toArray(arguments).slice(1);
+    var result = monad;
+
+    for (var i = 0; i < functions.length; ++i) {
+        result = tlc.callFunction(monad.constructor, "bind", [result, functions[i]]);
+    }
+
+    return result;
+};
+
+// tlc.liftM1 = function(f, monad) {
+//     function liftedFunction(f) {
+//         return function() {
+//             var result = tlc.apply(f, arguments);
+//             return tlc.callFunction(monad.constructor, "unit", [result]);
+//         };
+//     }
+
+//     var liftedF = liftedFunction(f);
+//     return tlc.callFunction(monad.constructor, "bind", [monad, liftedF]);
+// };
+
+// tlc.liftM2 = function(f, m1, m2) {
+//     function liftedFunction(f) {
+//         return function() {
+//             var result = tlc.apply(f, arguments);
+//             return tlc.callFunction(m1.constructor, "unit", [result]);
+//         };
+//     }
+
+//     var liftedF = tlc.curry(liftedFunction(f), 2);
+//     var r1 = tlc.callFunction(m1.constructor, "bind", [m1, liftedF]);
+//     var r2 = tlc.callFunction(m1.constructor, "bind", [m2, r1]);
+
+//     return r2;
+// };
+
+tlc.liftM = function(f) {
+    var monads = tlc.toArray(arguments).slice(1);
+    var type = monads[0].constructor;
+
+    function returnMonad(f) {
+        return function() {
+            var result = tlc.apply(f, arguments);
+            return tlc.callFunction(type, "unit", [result]);
+        };
+    }
+
+    var result = tlc.curry(returnMonad(f), monads.length);
+
+    for (var i = 0; i < monads.length; ++i) {
+        var monad = monads[i];
+        result = tlc.callFunction(type, "bind", [monad, result]);
+    }
+
+    return result;
+};
 
 
 module.exports = tlc;

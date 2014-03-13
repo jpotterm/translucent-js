@@ -4,20 +4,16 @@ var tlc = require("./core.js");
 require("./functor.js");
 
 
-tlc.reduce = tlc.curry(function(f, accumulator, xs) {
-    for (var i = 0; i < xs.length; ++i) {
-        accumulator = f(accumulator, xs[i]);
-    }
+tlc.addInstance(Array, {
+    map: function(f, xs) {
+       var ys = new Array(xs.length);
 
-    return accumulator;
-});
+       for (var i = 0; i < xs.length; ++i) {
+           ys[i] = f(xs[i]);
+       }
 
-tlc.reduceRight = tlc.curry(function(f, accumulator, xs) {
-    for (var i = xs.length - 1; i >= 0; --i) {
-        accumulator = f(xs[i], accumulator);
-    }
-
-    return accumulator;
+       return ys;
+   }
 });
 
 tlc.filter = tlc.curry(function(p, xs) {

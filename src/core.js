@@ -56,6 +56,22 @@ tlc.reverse = function(xs) {
 	return tlc.cloneArray(xs).reverse();
 };
 
+tlc.reduce = tlc.curry(function(f, accumulator, xs) {
+    for (var i = 0; i < xs.length; ++i) {
+        accumulator = f(accumulator, xs[i]);
+    }
+
+    return accumulator;
+});
+
+tlc.reduceRight = tlc.curry(function(f, accumulator, xs) {
+    for (var i = xs.length - 1; i >= 0; --i) {
+        accumulator = f(xs[i], accumulator);
+    }
+
+    return accumulator;
+});
+
 tlc.pipeline = function() {
 	var functions = tlc.toArray(arguments);
 

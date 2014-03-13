@@ -74,6 +74,22 @@ describe("array.reverse", function() {
     });
 });
 
+describe("core.reduce", function() {
+    it("should reduce (fold) an array using the given function and accumulator", function() {
+        var result = tlc.reduce(tlc.op["-"], 10, [1, 2, 3]);
+
+        expect(result).toBe(4);
+    });
+});
+
+describe("core.reduceRight", function() {
+    it("should reduce (fold) an array starting from the right", function() {
+        var result = tlc.reduceRight(tlc.op["-"], 10, [1, 2, 3]);
+
+        expect(result).toBe(-8);
+    });
+});
+
 describe("core.pipeline", function() {
     it("should compose functions from right to left", function() {
         function plusTwo(n) {return n + 2;}
