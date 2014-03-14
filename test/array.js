@@ -130,8 +130,86 @@ describe("array.zip", function() {
     });
 });
 
-describe("array.", function() {
-    it("", function() {
-        expect().toBe();
+describe("array.sortBy", function() {
+    it("should sort the array by the given comparator", function() {
+        function evenLessThanOdd(x, y) {return x % 2 - y % 2;}
+
+        var result = tlc.sortBy(evenLessThanOdd, [1, 2, 2, 1]);
+
+        expect(result[0]).toBe(2);
+        expect(result[1]).toBe(2);
+        expect(result[2]).toBe(1);
+        expect(result[3]).toBe(1);
+    });
+});
+
+describe("array.sort", function() {
+    it("should sort the array", function() {
+        var result = tlc.sort([3, 1, 4, 2]);
+
+        expect(result[0]).toBe(1);
+        expect(result[1]).toBe(2);
+        expect(result[2]).toBe(3);
+        expect(result[3]).toBe(4);
+    });
+});
+
+describe("array.flatten", function() {
+    it("should flatten the 2d array", function() {
+        var result = tlc.flatten([[1, 2], [3, 4]]);
+
+        expect(result[0]).toBe(1);
+        expect(result[1]).toBe(2);
+        expect(result[2]).toBe(3);
+        expect(result[3]).toBe(4);
+    });
+});
+
+describe("array.some", function() {
+    it("should indicate if some elements pass the predicate", function() {
+        function even(n) {return n % 2 === 0;}
+
+        expect(tlc.some(even, [1, 2, 3])).toBe(true);
+        expect(tlc.some(even, [1, 3])).toBe(false);
+    });
+});
+
+describe("array.every", function() {
+    it("should indicate if every element passes the predicate", function() {
+        function even(n) {return n % 2 === 0;}
+
+        expect(tlc.every(even, [2, 4])).toBe(true);
+        expect(tlc.every(even, [2, 4, 5])).toBe(false);
+    });
+});
+
+describe("array.contains", function() {
+    it("should indicate if an element is in an array", function() {
+        expect(tlc.contains(1, [1, 2, 3])).toBe(true);
+        expect(tlc.contains(1, [2, 3])).toBe(false);
+    });
+});
+
+describe("array.range", function() {
+    it("should produce the appropriate range", function() {
+        var result = tlc.range(1, 6, 2);
+
+        expect(result.length).toBe(3);
+        expect(result[0]).toBe(1);
+        expect(result[1]).toBe(3);
+        expect(result[2]).toBe(5);
+    });
+});
+
+describe("array.intersperse", function() {
+    it("should intersperse an element between elements of an array", function() {
+        var result = tlc.intersperse(0, [1, 2, 3]);
+
+        expect(result.length).toBe(5);
+        expect(result[0]).toBe(1);
+        expect(result[1]).toBe(0);
+        expect(result[2]).toBe(2);
+        expect(result[3]).toBe(0);
+        expect(result[4]).toBe(3);
     });
 });
