@@ -18,33 +18,6 @@ tlc.bind = function(monad) {
     return result;
 };
 
-// tlc.liftM1 = function(f, monad) {
-//     function liftedFunction(f) {
-//         return function() {
-//             var result = tlc.apply(f, arguments);
-//             return tlc.callFunction(monad.constructor, "unit", [result]);
-//         };
-//     }
-
-//     var liftedF = liftedFunction(f);
-//     return tlc.callFunction(monad.constructor, "bind", [monad, liftedF]);
-// };
-
-// tlc.liftM2 = function(f, m1, m2) {
-//     function liftedFunction(f) {
-//         return function() {
-//             var result = tlc.apply(f, arguments);
-//             return tlc.callFunction(m1.constructor, "unit", [result]);
-//         };
-//     }
-
-//     var liftedF = tlc.curry(liftedFunction(f), 2);
-//     var r1 = tlc.callFunction(m1.constructor, "bind", [m1, liftedF]);
-//     var r2 = tlc.callFunction(m1.constructor, "bind", [m2, r1]);
-
-//     return r2;
-// };
-
 tlc.liftM = function(f) {
     var monads = tlc.toArray(arguments).slice(1);
     var type = monads[0].constructor;

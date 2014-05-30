@@ -1,3 +1,5 @@
+"use strict";
+
 var tlc = require("../src/applicative.js");
 require("../src/maybe.js");
 

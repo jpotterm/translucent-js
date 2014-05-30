@@ -1,3 +1,5 @@
+"use strict";
+
 var tlc = require("../src/monad.js");
 require("../src/maybe.js");
 

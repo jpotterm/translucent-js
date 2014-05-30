@@ -1,10 +1,13 @@
+"use strict";
+
 var tlc = require("../src/set.js");
 
+function bothEvenOdd(x, y) {
+    return x % 2 === y % 2;
+}
 
 describe("set.uniqueBy", function() {
     it("should remove duplicate elements by comparator", function() {
-        function bothEvenOdd(x, y) {return x % 2 === y % 2;}
-
         var result = tlc.uniqueBy(bothEvenOdd, [1, 2, 3, 4]);
 
         expect(result.length).toBe(2);
@@ -26,8 +29,6 @@ describe("set.unique", function() {
 
 describe("set.unionBy", function() {
     it("should concat all arrays and remove duplicates by comparator", function() {
-        function bothEvenOdd(x, y) {return x % 2 === y % 2;}
-
         var result = tlc.unionBy(bothEvenOdd, [1, 2], [3, 4]);
 
         expect(result.length).toBe(2);
@@ -49,8 +50,6 @@ describe("set.union", function() {
 
 describe("set.intersectBy", function() {
     it("should keep only elements that are in every array by comparator", function() {
-        function bothEvenOdd(x, y) {return x % 2 === y % 2;}
-
         var result = tlc.intersectBy(bothEvenOdd, [1, 2], [3, 4], [5, 6]);
 
         expect(result.length).toBe(2);
