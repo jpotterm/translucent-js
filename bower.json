@@ -3,7 +3,11 @@
     "description": "A functional programming library that supports type classes.",
     "license": "CC0",
     "ignore": [
-        "!dist/"
+        "src/",
+        "test/",
+        "bower.json",
+        "gulpfile.js",
+        "package.json"
     ],
     "keywords": [
         "functional",
