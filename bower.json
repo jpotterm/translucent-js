@@ -5,6 +5,8 @@
     "ignore": [
         "src/",
         "test/",
+        ".gitignore",
+        ".jshintrc",
         "bower.json",
         "gulpfile.js",
         "package.json"
