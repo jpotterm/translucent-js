@@ -1,0 +1,16 @@
+{
+    "name": "translucent",
+    "main": [
+        "dist/translucent.js",
+        "dist/translucent.min.js"
+    ],
+    "license": "CC0",
+    "ignore": [
+        "./!(dist/*)"
+    ],
+    "keywords": [
+        "functional",
+        "type",
+        "class"
+    ]
+}
