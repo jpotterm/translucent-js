@@ -3,7 +3,7 @@
     "description": "A functional programming library that supports type classes.",
     "license": "CC0",
     "ignore": [
-        "./!(dist/*)"
+        "!dist/*"
     ],
     "keywords": [
         "functional",
