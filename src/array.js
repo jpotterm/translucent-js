@@ -108,7 +108,7 @@ tlc.zipWith = tlc.curry(function(f) {
     return tlc.map(tlc.apply(f), tlc.transpose(xss));
 }, 3);
 
-tlc.zip = tlc.curry(function () {
+tlc.zip = tlc.curry(function() {
     return tlc.transpose(tlc.toArray(arguments));
 }, 2);
 
