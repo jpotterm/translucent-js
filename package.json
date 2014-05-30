@@ -1,12 +1,13 @@
 {
     "name": "translucent",
     "version": "0.5.0",
-    "description": "A referentially transparent library for functional programming.",
+    "description": "A functional programming library that supports type classes.",
     "main": "index.js",
     "keywords": [
         "functional",
         "type",
-        "class"
+        "class",
+        "typeclass",
     ],
     "author": "Jonathan Potter",
     "license": "CC0",

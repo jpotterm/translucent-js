@@ -1,9 +1,6 @@
 {
     "name": "translucent",
-    "main": [
-        "dist/translucent.js",
-        "dist/translucent.min.js"
-    ],
+    "description": "A functional programming library that supports type classes.",
     "license": "CC0",
     "ignore": [
         "./!(dist/*)"
@@ -11,6 +8,7 @@
     "keywords": [
         "functional",
         "type",
-        "class"
+        "class",
+        "typeclass"
     ]
 }
