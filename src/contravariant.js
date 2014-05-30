@@ -4,7 +4,7 @@ var tlc = require("./core.js");
 
 
 tlc.contramap = function(f, contravariant) {
-    return tlc.callFunction(contravariant.constructor, "contramap", arguments);
+    return tlc.callInstance(contravariant.constructor, "contramap", arguments);
 };
 
 

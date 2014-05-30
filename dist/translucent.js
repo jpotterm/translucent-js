@@ -2,6 +2,23 @@
 "use strict";
 
 var tlc = _dereq_("./core.js");
+
+
+tlc.pure = function(type, value) {
+    return tlc.callInstance(type, "pure", [value]);
+};
+
+tlc.ap = function(maybeF, maybeX) {
+    return tlc.callInstance(maybeF.constructor, "ap", [maybeF, maybeX]);
+};
+
+
+module.exports = tlc;
+
+},{"./core.js":4}],2:[function(_dereq_,module,exports){
+"use strict";
+
+var tlc = _dereq_("./core.js");
 _dereq_("./functor.js");
 
 
@@ -173,7 +190,20 @@ tlc.intersperse = tlc.curry(function(sep, xs) {
 
 module.exports = tlc;
 
-},{"./core.js":2,"./functor.js":4}],2:[function(_dereq_,module,exports){
+},{"./core.js":4,"./functor.js":6}],3:[function(_dereq_,module,exports){
+"use strict";
+
+var tlc = _dereq_("./core.js");
+
+
+tlc.contramap = function(f, contravariant) {
+    return tlc.callInstance(contravariant.constructor, "contramap", arguments);
+};
+
+
+module.exports = tlc;
+
+},{"./core.js":4}],4:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = {};
@@ -364,7 +394,7 @@ tlc.getInstance = function(type) {
 	return undefined;
 };
 
-tlc.callFunction = function(type, fname, params) {
+tlc.callInstance = function(type, fname, params) {
 	var instance = tlc.getInstance(type);
 	return instance.implementation[fname].apply(null, params);
 };
@@ -372,35 +402,86 @@ tlc.callFunction = function(type, fname, params) {
 
 module.exports = tlc;
 
-},{}],3:[function(_dereq_,module,exports){
+},{}],5:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = _dereq_("./core.js");
 _dereq_("./functor.js");
 _dereq_("./monad.js");
 _dereq_("./array.js");
+_dereq_("./applicative.js");
+_dereq_("./contravariant.js");
+_dereq_("./maybe.js");
+_dereq_("./monoid.js");
+_dereq_("./set.js");
 
-},{"./array.js":1,"./core.js":2,"./functor.js":4,"./monad.js":5}],4:[function(_dereq_,module,exports){
+},{"./applicative.js":1,"./array.js":2,"./contravariant.js":3,"./core.js":4,"./functor.js":6,"./maybe.js":7,"./monad.js":8,"./monoid.js":9,"./set.js":10}],6:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("./core.js");
 
 
 tlc.map = function(f, functor) {
-	return tlc.callFunction(functor.constructor, "map", arguments);
+	return tlc.callInstance(functor.constructor, "map", arguments);
 };
 
 
 module.exports = tlc;
 
-},{"./core.js":2}],5:[function(_dereq_,module,exports){
+},{"./core.js":4}],7:[function(_dereq_,module,exports){
+"use strict";
+
+var tlc = _dereq_("./core.js");
+_dereq_("./functor.js");
+_dereq_("./applicative.js");
+_dereq_("./monad.js");
+
+
+tlc.Maybe = function(isNull, value) {
+    this.isNull = isNull;
+    this.value = value;
+};
+
+var maybeMap = function(f, maybe) {
+    return maybe.isNull ? maybe : new tlc.Maybe(false, f(maybe.value));
+};
+
+var maybeUnit = function(value) {
+    return new tlc.Maybe(false, value);
+};
+
+var maybeBind = function(maybe, f) {
+    return maybe.isNull ? maybe : f(maybe.value);
+};
+
+var maybeAp = function(maybeF, maybeX) {
+    return maybeF.isNull ? maybeF : tlc.map(maybeF.value, maybeX);
+};
+
+tlc.addInstance(tlc.Maybe, {
+    // Functor
+    map: maybeMap,
+
+    // Applicative
+    pure: maybeUnit,
+    ap: maybeAp,
+
+    // Monad
+    unit: maybeUnit,
+    bind: maybeBind
+});
+
+
+module.exports = tlc;
+
+},{"./applicative.js":1,"./core.js":4,"./functor.js":6,"./monad.js":8}],8:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("./core.js");
 
 
 tlc.unit = function(type, value) {
-    return tlc.callFunction(type, "unit", [value]);
+    return tlc.callInstance(type, "unit", [value]);
 };
 
 tlc.bind = function(monad) {
@@ -408,7 +489,7 @@ tlc.bind = function(monad) {
     var result = monad;
 
     for (var i = 0; i < functions.length; ++i) {
-        result = tlc.callFunction(monad.constructor, "bind", [result, functions[i]]);
+        result = tlc.callInstance(monad.constructor, "bind", [result, functions[i]]);
     }
 
     return result;
@@ -421,7 +502,7 @@ tlc.liftM = function(f) {
     function returnMonad(f) {
         return function() {
             var result = tlc.apply(f, arguments);
-            return tlc.callFunction(type, "unit", [result]);
+            return tlc.callInstance(type, "unit", [result]);
         };
     }
 
@@ -429,7 +510,7 @@ tlc.liftM = function(f) {
 
     for (var i = 0; i < monads.length; ++i) {
         var monad = monads[i];
-        result = tlc.callFunction(type, "bind", [monad, result]);
+        result = tlc.callInstance(type, "bind", [monad, result]);
     }
 
     return result;
@@ -438,6 +519,83 @@ tlc.liftM = function(f) {
 
 module.exports = tlc;
 
-},{"./core.js":2}]},{},[3])
-(3)
+},{"./core.js":4}],9:[function(_dereq_,module,exports){
+"use strict";
+
+var tlc = _dereq_("./core.js");
+
+
+tlc.mempty = function(type) {
+    return tlc.callInstance(type, "mempty", []);
+};
+
+tlc.mappend = function(x, y) {
+    return tlc.callInstance(x.constructor, "mappend", [x, y]);
+};
+
+tlc.mconcat = function(xs) {
+    var type = xs[0].constructor;
+    return tlc.reduceRight(tlc.mappend, tlc.mempty(type), xs);
+};
+
+
+module.exports = tlc;
+
+},{"./core.js":4}],10:[function(_dereq_,module,exports){
+"use strict";
+
+var tlc = _dereq_("./core.js");
+_dereq_("./array.js");
+
+tlc.uniqueBy = tlc.curry(function(eq, xs) {
+    var result = [];
+    eq = tlc.curry(eq);
+
+    for (var i = 0; i < xs.length; ++i) {
+        var x = xs[i];
+
+        if (!tlc.some(eq(x), result)) {
+            result.push(x);
+        }
+    }
+
+    return result;
+});
+
+tlc.unique = tlc.uniqueBy(tlc.op["==="]);
+
+tlc.unionBy = tlc.curry(function(eq) {
+    var collections = tlc.toArray(arguments).slice(1);
+    return tlc.uniqueBy(eq, tlc.flatten(collections));
+}, 3);
+
+tlc.union = tlc.unionBy(tlc.op["==="]);
+
+tlc.intersectBy = tlc.curry(function(eq, collection1) {
+    var rest = tlc.toArray(arguments).slice(2);
+
+    eq = tlc.curry(eq);
+
+    // True iff item is in xs
+    var hasItem = function(item, xs) {
+        return tlc.some(eq(item), xs);
+    };
+
+    hasItem = tlc.curry(hasItem);
+
+    // True iff item is in every other xs
+    var inRest = function(item) {
+        return tlc.every(hasItem(item), rest);
+    };
+
+    return tlc.filter(inRest, collection1);
+}, 3);
+
+tlc.intersect = tlc.intersectBy(tlc.op["==="]);
+
+
+module.exports = tlc;
+
+},{"./array.js":2,"./core.js":4}]},{},[5])
+(5)
 });

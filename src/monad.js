@@ -4,7 +4,7 @@ var tlc = require("./core.js");
 
 
 tlc.unit = function(type, value) {
-    return tlc.callFunction(type, "unit", [value]);
+    return tlc.callInstance(type, "unit", [value]);
 };
 
 tlc.bind = function(monad) {
@@ -12,7 +12,7 @@ tlc.bind = function(monad) {
     var result = monad;
 
     for (var i = 0; i < functions.length; ++i) {
-        result = tlc.callFunction(monad.constructor, "bind", [result, functions[i]]);
+        result = tlc.callInstance(monad.constructor, "bind", [result, functions[i]]);
     }
 
     return result;
@@ -25,7 +25,7 @@ tlc.liftM = function(f) {
     function returnMonad(f) {
         return function() {
             var result = tlc.apply(f, arguments);
-            return tlc.callFunction(type, "unit", [result]);
+            return tlc.callInstance(type, "unit", [result]);
         };
     }
 
@@ -33,7 +33,7 @@ tlc.liftM = function(f) {
 
     for (var i = 0; i < monads.length; ++i) {
         var monad = monads[i];
-        result = tlc.callFunction(type, "bind", [monad, result]);
+        result = tlc.callInstance(type, "bind", [monad, result]);
     }
 
     return result;
