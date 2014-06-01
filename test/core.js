@@ -185,9 +185,11 @@ describe("core.op['+']", function() {
     });
 });
 
-describe("core.op['-']", function() {
+describe("core.op['-'] and core.fop['-']", function() {
     it("should subtract", function() {
         expect(tlc.op["-"](1, 2)).toBe(-1);
+
+        expect(tlc.fop["-"](2, 1)).toBe(-1);
     });
 });
 
@@ -197,9 +199,11 @@ describe("core.op['*']", function() {
     });
 });
 
-describe("core.op['/']", function() {
+describe("core.op['/'] and core.fop['/']", function() {
     it("should divide", function() {
         expect(tlc.op["/"](4, 2)).toBe(2);
+
+        expect(tlc.fop["/"](2, 4)).toBe(2);
     });
 });
 
@@ -210,47 +214,65 @@ describe("core.op['===']", function() {
     });
 });
 
-describe("core.op['<']", function() {
+describe("core.op['<'] and core.fop['<']", function() {
     it("should determine less than", function() {
         expect(tlc.op["<"](1, 2)).toBe(true);
         expect(tlc.op["<"](1, 1)).toBe(false);
+
+        expect(tlc.fop["<"](2, 1)).toBe(true);
+        expect(tlc.fop["<"](1, 1)).toBe(false);
     });
 });
 
-describe("core.op['<=']", function() {
+describe("core.op['<='] and core.fop['<=']", function() {
     it("should determine less than or equal to", function() {
         expect(tlc.op["<="](1, 2)).toBe(true);
         expect(tlc.op["<="](1, 1)).toBe(true);
         expect(tlc.op["<="](2, 1)).toBe(false);
+
+        expect(tlc.fop["<="](2, 1)).toBe(true);
+        expect(tlc.fop["<="](1, 1)).toBe(true);
+        expect(tlc.fop["<="](1, 2)).toBe(false);
     });
 });
 
-describe("core.op['>']", function() {
+describe("core.op['>'] and core.fop['>']", function() {
     it("should determine greater than", function() {
         expect(tlc.op[">"](2, 1)).toBe(true);
         expect(tlc.op[">"](1, 1)).toBe(false);
+
+        expect(tlc.fop[">"](1, 2)).toBe(true);
+        expect(tlc.fop[">"](1, 1)).toBe(false);
     });
 });
 
-describe("core.op['>=']", function() {
+describe("core.op['>='] and core.fop['>=']", function() {
     it("should determine greater than or equal to", function() {
         expect(tlc.op[">="](2, 1)).toBe(true);
         expect(tlc.op[">="](1, 1)).toBe(true);
         expect(tlc.op[">="](1, 2)).toBe(false);
+
+        expect(tlc.fop[">="](1, 2)).toBe(true);
+        expect(tlc.fop[">="](1, 1)).toBe(true);
+        expect(tlc.fop[">="](2, 1)).toBe(false);
     });
 });
 
-describe("core.op['[]']", function() {
+describe("core.op['[]'] and core.fop['[]']", function() {
     it("should do array access", function() {
         var a = [1, 2, 3];
 
         expect(tlc.op["[]"](a, 2)).toBe(3);
+
+        expect(tlc.fop["[]"](2, a)).toBe(3);
     });
 
     it("should do object access", function() {
         var a = {one: 1};
 
         expect(tlc.op["[]"](a, "one")).toBe(1);
+
+        expect(tlc.fop["[]"]("one", a)).toBe(1);
     });
 });
 

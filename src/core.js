@@ -151,17 +151,27 @@ tlc.op = {
 	})
 };
 
-tlc.extend = function(a, b) {
-	function extendDestructive(a, b) {
-		for(var i in b) {
-			a[i] = b[i];
+tlc.fop = {};
+(function() {
+    var flippedOperators = ["-", "/", "<", "<=", ">", ">=", "[]"];
+
+    for (var i = 0; i < flippedOperators.length; ++i) {
+        var operator = flippedOperators[i];
+        tlc.fop[operator] = tlc.flip(tlc.op[operator]);
+    }
+}());
+
+tlc.extend = function(x, y) {
+	function extendDestructive(x, y) {
+		for(var i in y) {
+			x[i] = y[i];
 		}
 	}
 
 	var result = {};
 
-	extendDestructive(result, a);
-	extendDestructive(result, b);
+	extendDestructive(result, x);
+	extendDestructive(result, y);
 
 	return result;
 };
@@ -188,9 +198,9 @@ tlc.getInstance = function(type) {
 	return undefined;
 };
 
-tlc.callInstance = function(type, fname, params) {
+tlc.callInstance = function(type, fname, args) {
 	var instance = tlc.getInstance(type);
-	return instance.implementation[fname].apply(null, params);
+	return instance.implementation[fname].apply(null, args);
 };
 
 
