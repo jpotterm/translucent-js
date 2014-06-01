@@ -262,20 +262,20 @@ tlc.reverse = function(xs) {
     return tlc.cloneArray(xs).reverse();
 };
 
-tlc.reduce = tlc.curry(function(f, accumulator, xs) {
+tlc.reduce = tlc.curry(function(f, initVal, xs) {
     for (var i = 0; i < xs.length; ++i) {
-        accumulator = f(accumulator, xs[i]);
+        initVal = f(initVal, xs[i]);
     }
 
-    return accumulator;
+    return initVal;
 });
 
-tlc.reduceRight = tlc.curry(function(f, accumulator, xs) {
+tlc.reduceRight = tlc.curry(function(f, initVal, xs) {
     for (var i = xs.length - 1; i >= 0; --i) {
-        accumulator = f(xs[i], accumulator);
+        initVal = f(xs[i], initVal);
     }
 
-    return accumulator;
+    return initVal;
 });
 
 tlc.pipeline = function() {
