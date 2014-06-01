@@ -4,7 +4,7 @@ var tlc = require("./core.js");
 
 
 tlc.map = function(f, functor) {
-	return tlc.callInstance(functor.constructor, "map", arguments);
+    return tlc.callInstance(functor.constructor, "map", arguments);
 };
 
 
