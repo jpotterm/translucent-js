@@ -195,9 +195,9 @@ tlc.getInstance = function(type) {
     return undefined;
 };
 
-tlc.callInstance = function(type, fname, args) {
+tlc.callInstance = function(type, functionName, args) {
     var instance = tlc.getInstance(type);
-    return instance.implementation[fname].apply(null, args);
+    return instance.implementation[functionName].apply(null, args);
 };
 
 
