@@ -265,11 +265,8 @@ tlc.compose = function() {
 };
 
 tlc.flip = function(f) {
-    return function () {
-        var args = tlc.toArray(arguments);
-        var rest = args.slice(2);
-
-        return tlc.apply(f, tlc.concat([args[1]], [args[0]], rest));
+    return function(x, y) {
+        return f(y, x);
     };
 };
 
@@ -330,7 +327,7 @@ tlc.fop = {};
 
     for (var i = 0; i < flippedOperators.length; ++i) {
         var operator = flippedOperators[i];
-        tlc.fop[operator] = tlc.flip(tlc.op[operator]);
+        tlc.fop[operator] = tlc.curry(tlc.flip(tlc.op[operator]));
     }
 }());
 
@@ -383,14 +380,14 @@ module.exports = tlc;
 "use strict";
 
 module.exports = _dereq_("./core.js");
+_dereq_("./array.js");
+_dereq_("./maybe.js");
+_dereq_("./set.js");
 _dereq_("./typeclass/functor.js");
 _dereq_("./typeclass/monad.js");
-_dereq_("./array.js");
 _dereq_("./typeclass/applicative.js");
 _dereq_("./typeclass/contravariant.js");
-_dereq_("./maybe.js");
 _dereq_("./typeclass/monoid.js");
-_dereq_("./set.js");
 
 },{"./array.js":1,"./core.js":2,"./maybe.js":4,"./set.js":5,"./typeclass/applicative.js":6,"./typeclass/contravariant.js":7,"./typeclass/functor.js":8,"./typeclass/monad.js":9,"./typeclass/monoid.js":10}],4:[function(_dereq_,module,exports){
 "use strict";

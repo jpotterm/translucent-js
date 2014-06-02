@@ -14,43 +14,14 @@ Translucent adds powerful features from functional programming to JavaScript whi
 Documentation is on the [Github wiki](https://github.com/jpotterm/translucent-js/wiki/Documentation).
 
 
-# Cool things you can do with Translucent
+# Use Cases
 
-Partial application (currying):
+Some [examples](https://github.com/jpotterm/translucent-js/wiki/Use-Cases) of cool things you can do with Translucent.
 
-```javascript
-var plus1 = tlc.op['+'](1);
-```
 
-Mapping over arrays:
+# Contributing
 
-```javascript
-var a = [1, 2, 3, 4];
-tlc.map(plus1, a); // [2, 3, 4, 5]
-```
-
-Typeclasses let you use Translucent's features on your own data structures. To map over a tree you could do:
-
-```javascript
-function Tree(value, left, right) {
-    this.value = value;
-    this.left = left;
-    this.right = right;
-}
-
-function treeMap(f, tree) {
-    var left = (tree.left === undefined) ? undefined : treeMap(tree.left);
-    var right = (tree.right === undefined) ? undefined : treeMap(tree.right);
-
-    return new Tree(f(tree.value), left, right);
-}
-
-// Tell translucent how to map a Tree
-tlc.addInstance(Tree, {map: treeMap});
-
-var tree = new Tree(1, new Tree(2), new Tree(3));
-tlc.map(plus1, tree); // Tree 2 (Tree 3) (Tree 4)
-```
+To get set up to do development on Translucent and to submit pull requests, follow [this guide](https://github.com/jpotterm/translucent-js/wiki/Contributing).
 
 
 # License

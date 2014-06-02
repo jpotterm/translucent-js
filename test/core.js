@@ -114,16 +114,15 @@ describe("core.compose", function() {
 
 describe("core.flip", function() {
     it("should swap the order of the first two arguments", function() {
-        function echo(x, y, z) {
-            return [x, y, z];
+        function echo(x, y) {
+            return [x, y];
         }
 
         var ceho = tlc.flip(echo);
-        var result = ceho(1, 2, 3);
+        var result = ceho(1, 2);
 
         expect(result[0]).toBe(2);
         expect(result[1]).toBe(1);
-        expect(result[2]).toBe(3);
     });
 });
 

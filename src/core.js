@@ -89,11 +89,8 @@ tlc.compose = function() {
 };
 
 tlc.flip = function(f) {
-    return function () {
-        var args = tlc.toArray(arguments);
-        var rest = args.slice(2);
-
-        return tlc.apply(f, tlc.concat([args[1]], [args[0]], rest));
+    return function(x, y) {
+        return f(y, x);
     };
 };
 
@@ -154,7 +151,7 @@ tlc.fop = {};
 
     for (var i = 0; i < flippedOperators.length; ++i) {
         var operator = flippedOperators[i];
-        tlc.fop[operator] = tlc.flip(tlc.op[operator]);
+        tlc.fop[operator] = tlc.curry(tlc.flip(tlc.op[operator]));
     }
 }());
 
