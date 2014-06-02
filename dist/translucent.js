@@ -173,7 +173,7 @@ tlc.intersperse = tlc.curry(function(sep, xs) {
 
 module.exports = tlc;
 
-},{"./core.js":2,"./typeclass/functor.js":8}],2:[function(_dereq_,module,exports){
+},{"./core.js":2,"./typeclass/functor.js":9}],2:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = {};
@@ -383,13 +383,14 @@ module.exports = _dereq_("./core.js");
 _dereq_("./array.js");
 _dereq_("./maybe.js");
 _dereq_("./set.js");
+_dereq_("./object.js");
 _dereq_("./typeclass/functor.js");
 _dereq_("./typeclass/monad.js");
 _dereq_("./typeclass/applicative.js");
 _dereq_("./typeclass/contravariant.js");
 _dereq_("./typeclass/monoid.js");
 
-},{"./array.js":1,"./core.js":2,"./maybe.js":4,"./set.js":5,"./typeclass/applicative.js":6,"./typeclass/contravariant.js":7,"./typeclass/functor.js":8,"./typeclass/monad.js":9,"./typeclass/monoid.js":10}],4:[function(_dereq_,module,exports){
+},{"./array.js":1,"./core.js":2,"./maybe.js":4,"./object.js":5,"./set.js":6,"./typeclass/applicative.js":7,"./typeclass/contravariant.js":8,"./typeclass/functor.js":9,"./typeclass/monad.js":10,"./typeclass/monoid.js":11}],4:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("./core.js");
@@ -435,7 +436,24 @@ tlc.addInstance(tlc.Maybe, {
 
 module.exports = tlc;
 
-},{"./core.js":2,"./typeclass/applicative.js":6,"./typeclass/functor.js":8,"./typeclass/monad.js":9}],5:[function(_dereq_,module,exports){
+},{"./core.js":2,"./typeclass/applicative.js":7,"./typeclass/functor.js":9,"./typeclass/monad.js":10}],5:[function(_dereq_,module,exports){
+"use strict";
+
+var tlc = _dereq_("./core.js");
+
+
+tlc.prop = tlc.curry(function(propertyName, obj) {
+    return obj[propertyName];
+});
+
+tlc.propCall = tlc.curry(function(propertyName, args, obj) {
+    return obj[propertyName].apply(obj, args);
+});
+
+
+module.exports = tlc;
+
+},{"./core.js":2}],6:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("./core.js");
@@ -490,7 +508,7 @@ tlc.intersect = tlc.intersectBy(tlc.op["==="]);
 
 module.exports = tlc;
 
-},{"./array.js":1,"./core.js":2}],6:[function(_dereq_,module,exports){
+},{"./array.js":1,"./core.js":2}],7:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("../core.js");
@@ -507,7 +525,7 @@ tlc.ap = function(maybeF, maybeX) {
 
 module.exports = tlc;
 
-},{"../core.js":2}],7:[function(_dereq_,module,exports){
+},{"../core.js":2}],8:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("../core.js");
@@ -520,7 +538,7 @@ tlc.contramap = function(f, contravariant) {
 
 module.exports = tlc;
 
-},{"../core.js":2}],8:[function(_dereq_,module,exports){
+},{"../core.js":2}],9:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("../core.js");
@@ -533,7 +551,7 @@ tlc.map = function(f, functor) {
 
 module.exports = tlc;
 
-},{"../core.js":2}],9:[function(_dereq_,module,exports){
+},{"../core.js":2}],10:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("../core.js");
@@ -578,7 +596,7 @@ tlc.liftM = function(f) {
 
 module.exports = tlc;
 
-},{"../core.js":2}],10:[function(_dereq_,module,exports){
+},{"../core.js":2}],11:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = _dereq_("../core.js");

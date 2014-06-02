@@ -4,6 +4,7 @@ module.exports = require("./core.js");
 require("./array.js");
 require("./maybe.js");
 require("./set.js");
+require("./object.js");
 require("./typeclass/functor.js");
 require("./typeclass/monad.js");
 require("./typeclass/applicative.js");
