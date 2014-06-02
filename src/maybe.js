@@ -1,9 +1,9 @@
 "use strict";
 
 var tlc = require("./core.js");
-require("./functor.js");
-require("./applicative.js");
-require("./monad.js");
+require("./typeclass/functor.js");
+require("./typeclass/applicative.js");
+require("./typeclass/monad.js");
 
 
 tlc.Maybe = function(isNull, value) {

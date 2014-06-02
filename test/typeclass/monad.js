@@ -1,7 +1,7 @@
 "use strict";
 
-var tlc = require("../src/monad.js");
-require("../src/maybe.js");
+var tlc = require("../../src/typeclass/monad.js");
+require("../../src/maybe.js");
 
 
 describe("monad.unit", function() {

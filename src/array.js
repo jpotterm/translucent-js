@@ -1,7 +1,7 @@
 "use strict";
 
 var tlc = require("./core.js");
-require("./functor.js");
+require("./typeclass/functor.js");
 
 
 tlc.addInstance(Array, {

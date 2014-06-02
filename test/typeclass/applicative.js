@@ -1,7 +1,7 @@
 "use strict";
 
-var tlc = require("../src/applicative.js");
-require("../src/maybe.js");
+var tlc = require("../../src/typeclass/applicative.js");
+require("../../src/maybe.js");
 
 
 describe("applicative.pure", function() {

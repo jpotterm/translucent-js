@@ -1,6 +1,6 @@
 "use strict";
 
-var tlc = require("./core.js");
+var tlc = require("../core.js");
 
 
 tlc.pure = function(type, value) {

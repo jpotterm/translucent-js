@@ -1,6 +1,6 @@
 {
     "name": "translucent",
-    "description": "A functional programming library that supports type classes.",
+    "description": "A functional programming library that supports typeclasses.",
     "license": "CC0",
     "ignore": [
         "src/",

@@ -1,7 +1,7 @@
 "use strict";
 
-var tlc = require("../src/core.js");
-require("../src/contravariant.js");
+var tlc = require("../../src/core.js");
+require("../../src/typeclass/contravariant.js");
 
 
 var originalInstances;

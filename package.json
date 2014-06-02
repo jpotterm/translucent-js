@@ -1,7 +1,7 @@
 {
     "name": "translucent",
     "version": "0.6.0",
-    "description": "A functional programming library that supports type classes.",
+    "description": "A functional programming library that supports typeclasses.",
     "main": "index.js",
     "keywords": [
         "functional",
