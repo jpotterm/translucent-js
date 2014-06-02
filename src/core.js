@@ -145,15 +145,12 @@ tlc.op = {
     }),
     ">=": tlc.curry(function(x, y) {
         return x >= y;
-    }),
-    "[]": tlc.curry(function(xs, i) {
-        return xs[i];
     })
 };
 
 tlc.fop = {};
 (function() {
-    var flippedOperators = ["-", "/", "<", "<=", ">", ">=", "[]"];
+    var flippedOperators = ["-", "/", "<", "<=", ">", ">="];
 
     for (var i = 0; i < flippedOperators.length; ++i) {
         var operator = flippedOperators[i];

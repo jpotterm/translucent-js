@@ -258,24 +258,6 @@ describe("core.op['>='] and core.fop['>=']", function() {
     });
 });
 
-describe("core.op['[]'] and core.fop['[]']", function() {
-    it("should do array access", function() {
-        var a = [1, 2, 3];
-
-        expect(tlc.op["[]"](a, 2)).toBe(3);
-
-        expect(tlc.fop["[]"](2, a)).toBe(3);
-    });
-
-    it("should do object access", function() {
-        var a = {one: 1};
-
-        expect(tlc.op["[]"](a, "one")).toBe(1);
-
-        expect(tlc.fop["[]"]("one", a)).toBe(1);
-    });
-});
-
 describe("core.extend", function() {
     it("should combine and overwrite the left object", function() {
         var a = {one: 1, two: 2};
