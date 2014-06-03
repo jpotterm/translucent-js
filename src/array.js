@@ -75,13 +75,11 @@ tlc.group = tlc.groupBy(tlc.op["==="]);
 tlc.minimum = tlc.apply(Math.min);
 tlc.maximum = tlc.apply(Math.max);
 
-tlc.sum = function(xs) {
-    return tlc.reduce(tlc.op["+"], 0, xs);
-};
+tlc.sum = tlc.reduce(tlc.op["+"], 0);
+tlc.product = tlc.reduce(tlc.op["*"], 1);
 
-tlc.product = function(xs) {
-    return tlc.reduce(tlc.op["*"], 1, xs);
-};
+tlc.and = tlc.reduce(tlc.op["&&"], true);
+tlc.or = tlc.reduce(tlc.op["||"], false);
 
 tlc.length = function(xs) {
     return xs.length;
@@ -123,17 +121,11 @@ tlc.sort = function(xs) {
 tlc.flatten = tlc.apply(tlc.concat);
 
 tlc.some = tlc.curry(function(p, xs) {
-    return tlc.findIndex(p, xs) !== undefined;
+    return tlc.or(tlc.map(p, xs));
 });
 
 tlc.every = tlc.curry(function(p, xs) {
-    for (var i = 0; i < xs.length; ++i) {
-        if (!p(xs[i])) {
-            return false;
-        }
-    }
-
-    return true;
+    return tlc.and(tlc.map(p, xs));
 });
 
 tlc.contains = tlc.curry(function(item, xs) {

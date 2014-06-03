@@ -3,11 +3,11 @@
 var tlc = require("../core.js");
 
 
-tlc.unit = function(type, value) {
+tlc.unit = tlc.curry(function(type, value) {
     return tlc.callInstance(type, "unit", [value]);
-};
+});
 
-tlc.bind = function(monad) {
+tlc.bind = tlc.curry(function(monad) {
     var functions = tlc.toArray(arguments).slice(1);
     var result = monad;
 
@@ -16,7 +16,7 @@ tlc.bind = function(monad) {
     }
 
     return result;
-};
+}, 2);
 
 tlc.liftM = function(f) {
     var monads = tlc.toArray(arguments).slice(1);

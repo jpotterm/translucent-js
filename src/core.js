@@ -142,6 +142,12 @@ tlc.op = {
     }),
     ">=": tlc.curry(function(x, y) {
         return x >= y;
+    }),
+    "&&": tlc.curry(function(x, y) {
+        return x && y;
+    }),
+    "||": tlc.curry(function(x, y) {
+        return x || y;
     })
 };
 

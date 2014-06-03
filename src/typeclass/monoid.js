@@ -7,9 +7,9 @@ tlc.mempty = function(type) {
     return tlc.callInstance(type, "mempty", []);
 };
 
-tlc.mappend = function(x, y) {
+tlc.mappend = tlc.curry(function(x, y) {
     return tlc.callInstance(x.constructor, "mappend", [x, y]);
-};
+});
 
 tlc.mconcat = function(xs) {
     var type = xs[0].constructor;

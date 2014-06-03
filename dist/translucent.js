@@ -76,13 +76,11 @@ tlc.group = tlc.groupBy(tlc.op["==="]);
 tlc.minimum = tlc.apply(Math.min);
 tlc.maximum = tlc.apply(Math.max);
 
-tlc.sum = function(xs) {
-    return tlc.reduce(tlc.op["+"], 0, xs);
-};
+tlc.sum = tlc.reduce(tlc.op["+"], 0);
+tlc.product = tlc.reduce(tlc.op["*"], 1);
 
-tlc.product = function(xs) {
-    return tlc.reduce(tlc.op["*"], 1, xs);
-};
+tlc.and = tlc.reduce(tlc.op["&&"], true);
+tlc.or = tlc.reduce(tlc.op["||"], false);
 
 tlc.length = function(xs) {
     return xs.length;
@@ -124,17 +122,11 @@ tlc.sort = function(xs) {
 tlc.flatten = tlc.apply(tlc.concat);
 
 tlc.some = tlc.curry(function(p, xs) {
-    return tlc.findIndex(p, xs) !== undefined;
+    return tlc.or(tlc.map(p, xs));
 });
 
 tlc.every = tlc.curry(function(p, xs) {
-    for (var i = 0; i < xs.length; ++i) {
-        if (!p(xs[i])) {
-            return false;
-        }
-    }
-
-    return true;
+    return tlc.and(tlc.map(p, xs));
 });
 
 tlc.contains = tlc.curry(function(item, xs) {
@@ -318,6 +310,12 @@ tlc.op = {
     }),
     ">=": tlc.curry(function(x, y) {
         return x >= y;
+    }),
+    "&&": tlc.curry(function(x, y) {
+        return x && y;
+    }),
+    "||": tlc.curry(function(x, y) {
+        return x || y;
     })
 };
 
@@ -514,13 +512,13 @@ module.exports = tlc;
 var tlc = _dereq_("../core.js");
 
 
-tlc.pure = function(type, value) {
+tlc.pure = tlc.curry(function(type, value) {
     return tlc.callInstance(type, "pure", [value]);
-};
+});
 
-tlc.ap = function(maybeF, maybeX) {
+tlc.ap = tlc.curry(function(maybeF, maybeX) {
     return tlc.callInstance(maybeF.constructor, "ap", [maybeF, maybeX]);
-};
+});
 
 
 module.exports = tlc;
@@ -531,9 +529,9 @@ module.exports = tlc;
 var tlc = _dereq_("../core.js");
 
 
-tlc.contramap = function(f, contravariant) {
+tlc.contramap = tlc.curry(function(f, contravariant) {
     return tlc.callInstance(contravariant.constructor, "contramap", arguments);
-};
+});
 
 
 module.exports = tlc;
@@ -544,9 +542,9 @@ module.exports = tlc;
 var tlc = _dereq_("../core.js");
 
 
-tlc.map = function(f, functor) {
+tlc.map = tlc.curry(function(f, functor) {
     return tlc.callInstance(functor.constructor, "map", arguments);
-};
+});
 
 
 module.exports = tlc;
@@ -557,11 +555,11 @@ module.exports = tlc;
 var tlc = _dereq_("../core.js");
 
 
-tlc.unit = function(type, value) {
+tlc.unit = tlc.curry(function(type, value) {
     return tlc.callInstance(type, "unit", [value]);
-};
+});
 
-tlc.bind = function(monad) {
+tlc.bind = tlc.curry(function(monad) {
     var functions = tlc.toArray(arguments).slice(1);
     var result = monad;
 
@@ -570,7 +568,7 @@ tlc.bind = function(monad) {
     }
 
     return result;
-};
+}, 2);
 
 tlc.liftM = function(f) {
     var monads = tlc.toArray(arguments).slice(1);
@@ -606,9 +604,9 @@ tlc.mempty = function(type) {
     return tlc.callInstance(type, "mempty", []);
 };
 
-tlc.mappend = function(x, y) {
+tlc.mappend = tlc.curry(function(x, y) {
     return tlc.callInstance(x.constructor, "mappend", [x, y]);
-};
+});
 
 tlc.mconcat = function(xs) {
     var type = xs[0].constructor;
