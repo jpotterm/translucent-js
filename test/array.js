@@ -97,6 +97,20 @@ describe("array.product", function() {
     });
 });
 
+describe("array.and", function() {
+    it("should tell whether every boolean in the array is true", function() {
+        expect(tlc.and([true, false, true])).toBe(false);
+        expect(tlc.and([true, true, true])).toBe(true);
+    });
+});
+
+describe("array.or", function() {
+    it("should tell whether any boolean in the array is true", function() {
+        expect(tlc.or([true, false, true])).toBe(true);
+        expect(tlc.or([false, false, false])).toBe(false);
+    });
+});
+
 describe("array.transpose", function() {
     it("should transpose a 2d array", function() {
         var result = tlc.transpose([[1, 2], [3, 4]]);
