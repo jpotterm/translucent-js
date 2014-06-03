@@ -6,25 +6,25 @@ require("./typeclass/applicative.js");
 require("./typeclass/monad.js");
 
 
-tlc.Maybe = function(isNull, value) {
-    this.isNull = isNull;
+tlc.Maybe = function(hasValue, value) {
+    this.hasValue = hasValue;
     this.value = value;
 };
 
 var maybeMap = function(f, maybe) {
-    return maybe.isNull ? maybe : new tlc.Maybe(false, f(maybe.value));
+    return maybe.hasValue ? new tlc.Maybe(true, f(maybe.value)) : maybe;
 };
 
 var maybeUnit = function(value) {
-    return new tlc.Maybe(false, value);
+    return new tlc.Maybe(true, value);
 };
 
 var maybeBind = function(maybe, f) {
-    return maybe.isNull ? maybe : f(maybe.value);
+    return maybe.hasValue ? f(maybe.value) : maybe;
 };
 
 var maybeAp = function(maybeF, maybeX) {
-    return maybeF.isNull ? maybeF : tlc.map(maybeF.value, maybeX);
+    return maybeF.hasValue ? tlc.map(maybeF.value, maybeX) : maybeF;
 };
 
 tlc.addInstance(tlc.Maybe, {

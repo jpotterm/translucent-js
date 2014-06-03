@@ -1,6 +1,7 @@
 "use strict";
 
 var tlc = require("./core.js");
+require("./maybe.js");
 require("./typeclass/functor.js");
 
 
@@ -27,21 +28,16 @@ tlc.filter = tlc.curry(function(p, xs) {
 tlc.findIndex = tlc.curry(function(p, xs) {
     for (var i = 0; i < xs.length; ++i) {
         if (p(xs[i])) {
-            return i;
+            return new tlc.Maybe(true, i);
         }
     }
 
-    return undefined;
+    return new tlc.Maybe(false);
 });
 
 tlc.find = tlc.curry(function(p, xs) {
-    var i = tlc.findIndex(p, xs);
-
-    if (i === undefined) {
-        return undefined;
-    }
-
-    return xs[i];
+    var xsProp = tlc.flip(tlc.prop)(xs);
+    return tlc.map(xsProp, tlc.findIndex(p, xs));
 });
 
 tlc.groupBy = tlc.curry(function(eq, xs) {

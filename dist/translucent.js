@@ -2,6 +2,7 @@
 "use strict";
 
 var tlc = _dereq_("./core.js");
+_dereq_("./maybe.js");
 _dereq_("./typeclass/functor.js");
 
 
@@ -28,21 +29,16 @@ tlc.filter = tlc.curry(function(p, xs) {
 tlc.findIndex = tlc.curry(function(p, xs) {
     for (var i = 0; i < xs.length; ++i) {
         if (p(xs[i])) {
-            return i;
+            return new tlc.Maybe(true, i);
         }
     }
 
-    return undefined;
+    return new tlc.Maybe(false);
 });
 
 tlc.find = tlc.curry(function(p, xs) {
-    var i = tlc.findIndex(p, xs);
-
-    if (i === undefined) {
-        return undefined;
-    }
-
-    return xs[i];
+    var xsProp = tlc.flip(tlc.prop)(xs);
+    return tlc.map(xsProp, tlc.findIndex(p, xs));
 });
 
 tlc.groupBy = tlc.curry(function(eq, xs) {
@@ -165,7 +161,7 @@ tlc.intersperse = tlc.curry(function(sep, xs) {
 
 module.exports = tlc;
 
-},{"./core.js":2,"./typeclass/functor.js":9}],2:[function(_dereq_,module,exports){
+},{"./core.js":2,"./maybe.js":4,"./typeclass/functor.js":9}],2:[function(_dereq_,module,exports){
 "use strict";
 
 var tlc = {};
@@ -257,9 +253,9 @@ tlc.compose = function() {
 };
 
 tlc.flip = function(f) {
-    return function(x, y) {
+    return tlc.curry(function(x, y) {
         return f(y, x);
-    };
+    });
 };
 
 tlc.memoizeBy = tlc.curry(function(hasher, f) {
@@ -325,7 +321,7 @@ tlc.fop = {};
 
     for (var i = 0; i < flippedOperators.length; ++i) {
         var operator = flippedOperators[i];
-        tlc.fop[operator] = tlc.curry(tlc.flip(tlc.op[operator]));
+        tlc.fop[operator] = tlc.flip(tlc.op[operator]);
     }
 }());
 
@@ -343,6 +339,10 @@ tlc.extend = function(x, y) {
 
     return result;
 };
+
+tlc.prop = tlc.curry(function(propertyName, obj) {
+    return obj[propertyName];
+});
 
 tlc.addInstance = function(type, implementation) {
     var instance = tlc.getInstance(type);
@@ -397,25 +397,25 @@ _dereq_("./typeclass/applicative.js");
 _dereq_("./typeclass/monad.js");
 
 
-tlc.Maybe = function(isNull, value) {
-    this.isNull = isNull;
+tlc.Maybe = function(hasValue, value) {
+    this.hasValue = hasValue;
     this.value = value;
 };
 
 var maybeMap = function(f, maybe) {
-    return maybe.isNull ? maybe : new tlc.Maybe(false, f(maybe.value));
+    return maybe.hasValue ? new tlc.Maybe(true, f(maybe.value)) : maybe;
 };
 
 var maybeUnit = function(value) {
-    return new tlc.Maybe(false, value);
+    return new tlc.Maybe(true, value);
 };
 
 var maybeBind = function(maybe, f) {
-    return maybe.isNull ? maybe : f(maybe.value);
+    return maybe.hasValue ? f(maybe.value) : maybe;
 };
 
 var maybeAp = function(maybeF, maybeX) {
-    return maybeF.isNull ? maybeF : tlc.map(maybeF.value, maybeX);
+    return maybeF.hasValue ? tlc.map(maybeF.value, maybeX) : maybeF;
 };
 
 tlc.addInstance(tlc.Maybe, {
@@ -439,10 +439,6 @@ module.exports = tlc;
 
 var tlc = _dereq_("./core.js");
 
-
-tlc.prop = tlc.curry(function(propertyName, obj) {
-    return obj[propertyName];
-});
 
 tlc.propCall = tlc.curry(function(propertyName, args, obj) {
     return obj[propertyName].apply(obj, args);

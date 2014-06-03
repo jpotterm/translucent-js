@@ -89,9 +89,9 @@ tlc.compose = function() {
 };
 
 tlc.flip = function(f) {
-    return function(x, y) {
+    return tlc.curry(function(x, y) {
         return f(y, x);
-    };
+    });
 };
 
 tlc.memoizeBy = tlc.curry(function(hasher, f) {
@@ -157,7 +157,7 @@ tlc.fop = {};
 
     for (var i = 0; i < flippedOperators.length; ++i) {
         var operator = flippedOperators[i];
-        tlc.fop[operator] = tlc.curry(tlc.flip(tlc.op[operator]));
+        tlc.fop[operator] = tlc.flip(tlc.op[operator]);
     }
 }());
 
@@ -175,6 +175,10 @@ tlc.extend = function(x, y) {
 
     return result;
 };
+
+tlc.prop = tlc.curry(function(propertyName, obj) {
+    return obj[propertyName];
+});
 
 tlc.addInstance = function(type, implementation) {
     var instance = tlc.getInstance(type);

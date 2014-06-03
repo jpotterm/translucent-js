@@ -21,29 +21,31 @@ describe("array.findIndex", function() {
     it("should return the index of the element if it exists", function() {
         var result = tlc.findIndex(isTwo, [1, 2, 3]);
 
-        expect(result).toBe(1);
+        expect(result.hasValue).toBe(true);
+        expect(result.value).toBe(1);
     });
 
     it("should return undefined if the element doesn't exist", function() {
         var result = tlc.findIndex(isTwo, [1, 3, 4]);
 
-        expect(result).toBe(undefined);
+        expect(result.hasValue).toBe(false);
     });
 });
 
 describe("array.find", function() {
     function isTwo(x) {return x === 2;}
 
-    it("should return the element if it exists", function() {
+    it("should return Just the element if it exists", function() {
         var result = tlc.find(isTwo, [1, 2, 3]);
 
-        expect(result).toBe(2);
+        expect(result.hasValue).toBe(true);
+        expect(result.value).toBe(2);
     });
 
-    it("should return undefined if the element doesn't exist", function() {
+    it("should return Nothing if the element doesn't exist", function() {
         var result = tlc.find(isTwo, [1, 3, 4]);
 
-        expect(result).toBe(undefined);
+        expect(result.hasValue).toBe(false);
     });
 });
 

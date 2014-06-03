@@ -269,3 +269,11 @@ describe("core.extend", function() {
         expect(c.three).toBe(3);
     });
 });
+
+describe("core.prop", function() {
+    it("should access a property on an object", function() {
+        var o = {"one": 1};
+
+        expect(tlc.prop("one", o)).toBe(1);
+    });
+});
