@@ -6,11 +6,6 @@ require("./typeclass/applicative.js");
 require("./typeclass/monad.js");
 
 
-tlc.Maybe = function(hasValue, value) {
-    this.hasValue = hasValue;
-    this.value = value;
-};
-
 var maybeUnit = function(value) {
     return new tlc.Maybe(true, value);
 };

@@ -4,12 +4,12 @@ var tlc = require("../core.js");
 
 
 tlc.mempty = function(type) {
-    var mempty = tlc.getInstanceFunc(type, "mempty");
+    var mempty = tlc.getInstanceFunc(type, "mempty").value;
     return mempty();
 };
 
 tlc.mappend = tlc.curry(function(x, y) {
-    var mappend = tlc.getInstanceFunc(x.constructor, "mappend");
+    var mappend = tlc.getInstanceFunc(x.constructor, "mappend").value;
     return mappend(x, y);
 });
 

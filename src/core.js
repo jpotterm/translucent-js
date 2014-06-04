@@ -180,13 +180,19 @@ tlc.prop = tlc.curry(function(propertyName, obj) {
     return obj[propertyName];
 });
 
-tlc.addInstance = function(type, implementation) {
-    var instance = tlc.getInstance(type);
+tlc.Maybe = function(hasValue, value) {
+    this.hasValue = hasValue;
+    this.value = value;
+};
 
-    if (instance === undefined) {
-        tlc.instances.push({type: type, implementation: implementation});
-    } else {
+tlc.addInstance = function(type, implementation) {
+    var maybeInstance = tlc.getInstance(type);
+
+    if (maybeInstance.hasValue) {
+        var instance = maybeInstance.value;
         instance.implementation = tlc.extend(instance.implementation, implementation);
+    } else {
+        tlc.instances.push({type: type, implementation: implementation});
     }
 };
 
@@ -195,21 +201,27 @@ tlc.getInstance = function(type) {
         var instance = tlc.instances[i];
 
         if (instance.type === type) {
-            return instance;
+            return new tlc.Maybe(true, instance);
         }
     }
 
-    return undefined;
+    return new tlc.Maybe(false);
 };
 
 tlc.getInstanceFunc = function(type, functionName) {
-    var instance = tlc.getInstance(type);
+    var maybeInstance = tlc.getInstance(type);
 
-    if (instance === undefined) {
-        return undefined;
+    if (maybeInstance.hasValue) {
+        var f = maybeInstance.value.implementation[functionName];
+
+        if (f === undefined) {
+            return new tlc.Maybe(false);
+        } else {
+            return new tlc.Maybe(true, f);
+        }
+    } else {
+        return maybeInstance;
     }
-
-    return instance.implementation[functionName];
 };
 
 
