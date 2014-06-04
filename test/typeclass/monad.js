@@ -35,24 +35,3 @@ describe("monad.bind", function() {
         expect(failure.hasValue).toBe(false);
     });
 });
-
-describe("monad.liftM", function() {
-    it("should lift a function into a monad", function() {
-        function add(x, y, z) {
-            return x + y + z;
-        }
-
-        var a = new tlc.Maybe(true, 1);
-        var b = new tlc.Maybe(true, 2);
-        var c = new tlc.Maybe(true, 3);
-        var nothing = new tlc.Maybe(false);
-
-        var success = tlc.liftM(add, a, b, c);
-        var failure = tlc.liftM(add, a, b, nothing);
-
-        expect(success.hasValue).toBe(true);
-        expect(success.value).toBe(6);
-
-        expect(failure.hasValue).toBe(false);
-    });
-});

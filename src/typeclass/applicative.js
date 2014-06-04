@@ -4,11 +4,13 @@ var tlc = require("../core.js");
 
 
 tlc.pure = tlc.curry(function(type, value) {
-    return tlc.callInstance(type, "pure", [value]);
+    var pure = tlc.getInstanceFunc(type, "pure");
+    return pure(value);
 });
 
 tlc.ap = tlc.curry(function(maybeF, maybeX) {
-    return tlc.callInstance(maybeF.constructor, "ap", [maybeF, maybeX]);
+    var ap = tlc.getInstanceFunc(maybeF.constructor, "ap");
+    return ap(maybeF, maybeX);
 });
 
 

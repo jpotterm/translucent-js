@@ -366,9 +366,14 @@ tlc.getInstance = function(type) {
     return undefined;
 };
 
-tlc.callInstance = function(type, functionName, args) {
+tlc.getInstanceFunc = function(type, functionName) {
     var instance = tlc.getInstance(type);
-    return instance.implementation[functionName].apply(null, args);
+
+    if (instance === undefined) {
+        return undefined;
+    }
+
+    return instance.implementation[functionName];
 };
 
 
@@ -402,10 +407,6 @@ tlc.Maybe = function(hasValue, value) {
     this.value = value;
 };
 
-var maybeMap = function(f, maybe) {
-    return maybe.hasValue ? new tlc.Maybe(true, f(maybe.value)) : maybe;
-};
-
 var maybeUnit = function(value) {
     return new tlc.Maybe(true, value);
 };
@@ -419,14 +420,11 @@ var maybeAp = function(maybeF, maybeX) {
 };
 
 tlc.addInstance(tlc.Maybe, {
-    // Functor
-    map: maybeMap,
-
     // Applicative
     pure: maybeUnit,
     ap: maybeAp,
 
-    // Monad
+    // Monad and Functor
     unit: maybeUnit,
     bind: maybeBind
 });
@@ -518,11 +516,13 @@ var tlc = _dereq_("../core.js");
 
 
 tlc.pure = tlc.curry(function(type, value) {
-    return tlc.callInstance(type, "pure", [value]);
+    var pure = tlc.getInstanceFunc(type, "pure");
+    return pure(value);
 });
 
 tlc.ap = tlc.curry(function(maybeF, maybeX) {
-    return tlc.callInstance(maybeF.constructor, "ap", [maybeF, maybeX]);
+    var ap = tlc.getInstanceFunc(maybeF.constructor, "ap");
+    return ap(maybeF, maybeX);
 });
 
 
@@ -535,7 +535,8 @@ var tlc = _dereq_("../core.js");
 
 
 tlc.contramap = tlc.curry(function(f, contravariant) {
-    return tlc.callInstance(contravariant.constructor, "contramap", arguments);
+    var contramap = tlc.getInstanceFunc(contravariant.constructor, "contramap");
+    return contramap(f, contravariant);
 });
 
 
@@ -548,7 +549,16 @@ var tlc = _dereq_("../core.js");
 
 
 tlc.map = tlc.curry(function(f, functor) {
-    return tlc.callInstance(functor.constructor, "map", arguments);
+    var type = functor.constructor;
+    var map = tlc.getInstanceFunc(type, "map");
+
+    if (map !== undefined) {
+        return map(f, functor);
+    }
+
+    // If a map implementation is not registered, fall back to unit and bind
+    var unit = tlc.unit(type);
+    return tlc.bind(functor, tlc.compose(unit, f));
 });
 
 
@@ -561,40 +571,21 @@ var tlc = _dereq_("../core.js");
 
 
 tlc.unit = tlc.curry(function(type, value) {
-    return tlc.callInstance(type, "unit", [value]);
+    var unit = tlc.getInstanceFunc(type, "unit");
+    return unit(value);
 });
 
 tlc.bind = tlc.curry(function(monad) {
     var functions = tlc.toArray(arguments).slice(1);
+    var bind = tlc.getInstanceFunc(monad.constructor, "bind");
     var result = monad;
 
     for (var i = 0; i < functions.length; ++i) {
-        result = tlc.callInstance(monad.constructor, "bind", [result, functions[i]]);
+        result = bind(result, functions[i]);
     }
 
     return result;
 }, 2);
-
-tlc.liftM = function(f) {
-    var monads = tlc.toArray(arguments).slice(1);
-    var type = monads[0].constructor;
-
-    function returnMonad(f) {
-        return function() {
-            var result = tlc.apply(f, arguments);
-            return tlc.callInstance(type, "unit", [result]);
-        };
-    }
-
-    var result = tlc.curry(returnMonad(f), monads.length);
-
-    for (var i = 0; i < monads.length; ++i) {
-        var monad = monads[i];
-        result = tlc.callInstance(type, "bind", [monad, result]);
-    }
-
-    return result;
-};
 
 
 module.exports = tlc;
@@ -606,11 +597,13 @@ var tlc = _dereq_("../core.js");
 
 
 tlc.mempty = function(type) {
-    return tlc.callInstance(type, "mempty", []);
+    var mempty = tlc.getInstanceFunc(type, "mempty");
+    return mempty();
 };
 
 tlc.mappend = tlc.curry(function(x, y) {
-    return tlc.callInstance(x.constructor, "mappend", [x, y]);
+    var mappend = tlc.getInstanceFunc(x.constructor, "mappend");
+    return mappend(x, y);
 });
 
 tlc.mconcat = function(xs) {

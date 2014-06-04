@@ -11,10 +11,6 @@ tlc.Maybe = function(hasValue, value) {
     this.value = value;
 };
 
-var maybeMap = function(f, maybe) {
-    return maybe.hasValue ? new tlc.Maybe(true, f(maybe.value)) : maybe;
-};
-
 var maybeUnit = function(value) {
     return new tlc.Maybe(true, value);
 };
@@ -28,14 +24,11 @@ var maybeAp = function(maybeF, maybeX) {
 };
 
 tlc.addInstance(tlc.Maybe, {
-    // Functor
-    map: maybeMap,
-
     // Applicative
     pure: maybeUnit,
     ap: maybeAp,
 
-    // Monad
+    // Monad and Functor
     unit: maybeUnit,
     bind: maybeBind
 });

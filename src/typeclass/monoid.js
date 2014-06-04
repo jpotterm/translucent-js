@@ -4,11 +4,13 @@ var tlc = require("../core.js");
 
 
 tlc.mempty = function(type) {
-    return tlc.callInstance(type, "mempty", []);
+    var mempty = tlc.getInstanceFunc(type, "mempty");
+    return mempty();
 };
 
 tlc.mappend = tlc.curry(function(x, y) {
-    return tlc.callInstance(x.constructor, "mappend", [x, y]);
+    var mappend = tlc.getInstanceFunc(x.constructor, "mappend");
+    return mappend(x, y);
 });
 
 tlc.mconcat = function(xs) {
