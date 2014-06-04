@@ -431,6 +431,15 @@ tlc.addInstance(tlc.Maybe, {
     bind: maybeBind
 });
 
+tlc.catMaybes = function(xs) {
+    var justs = tlc.filter(tlc.prop("hasValue"), xs);
+    return tlc.map(tlc.prop("value"), justs);
+};
+
+tlc.mapMaybe = tlc.curry(function(f, xs) {
+    return tlc.catMaybes(tlc.map(f, xs));
+});
+
 
 module.exports = tlc;
 
