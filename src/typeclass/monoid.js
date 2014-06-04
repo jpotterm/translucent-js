@@ -8,10 +8,10 @@ tlc.mempty = function(type) {
     return mempty();
 };
 
-tlc.mappend = tlc.curry(function(x, y) {
+tlc.mappend = function(x, y) {
     var mappend = tlc.getInstanceFunc(x.constructor, "mappend").value;
     return mappend(x, y);
-});
+};
 
 tlc.mconcat = function(xs) {
     var type = xs[0].constructor;

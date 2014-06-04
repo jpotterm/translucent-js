@@ -1,31 +1,49 @@
 "use strict";
 
 var tlc = require("./core.js");
-require("./maybe.js");
-require("./typeclass/functor.js");
 
 
-tlc.addInstance(Array, {
-    map: function(f, xs) {
-       var ys = new Array(xs.length);
+tlc.toArray = function(xs) {
+    return Array.prototype.slice.call(xs);
+};
 
-       for (var i = 0; i < xs.length; ++i) {
-           ys[i] = f(xs[i]);
-       }
+tlc.cloneArray = tlc.toArray;
 
-       return ys;
-   }
-});
+tlc.concat = function() {
+    var args = tlc.toArray(arguments);
 
-tlc.filter = tlc.curry(function(p, xs) {
+    return args[0].concat.apply(args[0], args.slice(1));
+};
+
+tlc.reverse = function(xs) {
+    return tlc.cloneArray(xs).reverse();
+};
+
+tlc.reduce = function(f, initVal, xs) {
+    for (var i = 0; i < xs.length; ++i) {
+        initVal = f(initVal, xs[i]);
+    }
+
+    return initVal;
+};
+
+tlc.reduceRight = function(f, initVal, xs) {
+    for (var i = xs.length - 1; i >= 0; --i) {
+        initVal = f(xs[i], initVal);
+    }
+
+    return initVal;
+};
+
+tlc.filter = function(p, xs) {
     function concatIfPasses(xs, y) {
         return p(y) ? tlc.concat(xs, [y]) : xs;
     }
 
     return tlc.reduce(concatIfPasses, [], xs);
-});
+};
 
-tlc.findIndex = tlc.curry(function(p, xs) {
+tlc.findIndex = function(p, xs) {
     for (var i = 0; i < xs.length; ++i) {
         if (p(xs[i])) {
             return new tlc.Maybe(true, i);
@@ -33,14 +51,14 @@ tlc.findIndex = tlc.curry(function(p, xs) {
     }
 
     return new tlc.Maybe(false);
-});
+};
 
-tlc.find = tlc.curry(function(p, xs) {
+tlc.find = function(p, xs) {
     var xsProp = tlc.flip(tlc.prop)(xs);
     return tlc.map(xsProp, tlc.findIndex(p, xs));
-});
+};
 
-tlc.groupBy = tlc.curry(function(eq, xs) {
+tlc.groupBy = function(eq, xs) {
     var groups = [];
     var currentGroup = [];
 
@@ -64,18 +82,35 @@ tlc.groupBy = tlc.curry(function(eq, xs) {
     }
 
     return groups;
-});
+};
 
-tlc.group = tlc.groupBy(tlc.op["==="]);
+tlc.group = function(xs) {
+    return tlc.groupBy(tlc.op["==="], xs);
+};
 
-tlc.minimum = tlc.apply(Math.min);
-tlc.maximum = tlc.apply(Math.max);
+tlc.minimum = function(xs) {
+    return tlc.apply(Math.min, xs);
+};
 
-tlc.sum = tlc.reduce(tlc.op["+"], 0);
-tlc.product = tlc.reduce(tlc.op["*"], 1);
+tlc.maximum = function(xs) {
+    return tlc.apply(Math.max, xs);
+};
 
-tlc.and = tlc.reduce(tlc.op["&&"], true);
-tlc.or = tlc.reduce(tlc.op["||"], false);
+tlc.sum = function(xs) {
+    return tlc.reduce(tlc.op["+"], 0, xs);
+};
+
+tlc.product = function(xs) {
+    return tlc.reduce(tlc.op["*"], 1, xs);
+};
+
+tlc.and = function(xs) {
+    return tlc.reduce(tlc.op["&&"], true, xs);
+};
+
+tlc.or = function(xs) {
+    return tlc.reduce(tlc.op["||"], false, xs);
+};
 
 tlc.length = function(xs) {
     return xs.length;
@@ -97,36 +132,38 @@ tlc.transpose = function(xss) {
     return transposed;
 };
 
-tlc.zipWith = tlc.curry(function(f) {
+tlc.zipWith = function(f) {
     var xss = tlc.toArray(arguments).slice(1);
     return tlc.map(tlc.apply(f), tlc.transpose(xss));
-}, 3);
+};
 
-tlc.zip = tlc.curry(function() {
+tlc.zip = function() {
     return tlc.transpose(tlc.toArray(arguments));
-}, 2);
+};
 
-tlc.sortBy = tlc.curry(function(compare, xs) {
+tlc.sortBy = function(compare, xs) {
     return tlc.cloneArray(xs).sort(compare);
-});
+};
 
 tlc.sort = function(xs) {
     return tlc.cloneArray(xs).sort();
 };
 
-tlc.flatten = tlc.apply(tlc.concat);
+tlc.flatten = function(xss) {
+    return tlc.apply(tlc.concat, xss);
+};
 
-tlc.some = tlc.curry(function(p, xs) {
+tlc.some = function(p, xs) {
     return tlc.or(tlc.map(p, xs));
-});
+};
 
-tlc.every = tlc.curry(function(p, xs) {
+tlc.every = function(p, xs) {
     return tlc.and(tlc.map(p, xs));
-});
+};
 
-tlc.contains = tlc.curry(function(item, xs) {
+tlc.contains = function(item, xs) {
     return tlc.some(tlc.op["==="](item), xs);
-});
+};
 
 tlc.range = function(start, stop, step) {
     if (step === undefined) {
@@ -143,7 +180,7 @@ tlc.range = function(start, stop, step) {
     return result;
 };
 
-tlc.intersperse = tlc.curry(function(sep, xs) {
+tlc.intersperse = function(sep, xs) {
     var resultCollection = [];
 
     for (var i = 0; i < xs.length; ++i) {
@@ -155,7 +192,7 @@ tlc.intersperse = tlc.curry(function(sep, xs) {
     }
 
     return resultCollection;
-});
+};
 
 
 module.exports = tlc;

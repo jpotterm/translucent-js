@@ -3,12 +3,12 @@
 var tlc = require("../core.js");
 
 
-tlc.unit = tlc.curry(function(type, value) {
+tlc.unit = function(type, value) {
     var unit = tlc.getInstanceFunc(type, "unit").value;
     return unit(value);
-});
+};
 
-tlc.bind = tlc.curry(function(monad) {
+tlc.bind = function(monad) {
     var functions = tlc.toArray(arguments).slice(1);
     var bind = tlc.getInstanceFunc(monad.constructor, "bind").value;
     var result = monad;
@@ -18,7 +18,7 @@ tlc.bind = tlc.curry(function(monad) {
     }
 
     return result;
-}, 2);
+};
 
 
 module.exports = tlc;

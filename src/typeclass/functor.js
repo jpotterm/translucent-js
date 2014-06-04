@@ -3,7 +3,7 @@
 var tlc = require("../core.js");
 
 
-tlc.map = tlc.curry(function(f, functor) {
+tlc.map = function(f, functor) {
     var type = functor.constructor;
     var maybeMap = tlc.getInstanceFunc(type, "map");
 
@@ -14,7 +14,7 @@ tlc.map = tlc.curry(function(f, functor) {
         var unit = tlc.unit(type);
         return tlc.bind(functor, tlc.compose(unit, f));
     }
-});
+};
 
 
 module.exports = tlc;

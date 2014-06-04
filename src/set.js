@@ -1,9 +1,9 @@
 "use strict";
 
 var tlc = require("./core.js");
-require("./array.js");
 
-tlc.uniqueBy = tlc.curry(function(eq, xs) {
+
+tlc.uniqueBy = function(eq, xs) {
     var result = [];
     eq = tlc.curry(eq);
 
@@ -16,18 +16,23 @@ tlc.uniqueBy = tlc.curry(function(eq, xs) {
     }
 
     return result;
-});
+};
 
-tlc.unique = tlc.uniqueBy(tlc.op["==="]);
+tlc.unique = function(xs) {
+    return tlc.uniqueBy(tlc.op["==="], xs);
+};
 
-tlc.unionBy = tlc.curry(function(eq) {
+tlc.unionBy = function(eq) {
     var collections = tlc.toArray(arguments).slice(1);
     return tlc.uniqueBy(eq, tlc.flatten(collections));
-}, 3);
+};
 
-tlc.union = tlc.unionBy(tlc.op["==="]);
+tlc.union = function() {
+    var args = tlc.concat([tlc.op["==="]], tlc.toArray(arguments));
+    return tlc.apply(tlc.unionBy, args);
+};
 
-tlc.intersectBy = tlc.curry(function(eq, collection1) {
+tlc.intersectBy = function(eq, collection1) {
     var rest = tlc.toArray(arguments).slice(2);
 
     eq = tlc.curry(eq);
@@ -45,9 +50,12 @@ tlc.intersectBy = tlc.curry(function(eq, collection1) {
     };
 
     return tlc.filter(inRest, collection1);
-}, 3);
+};
 
-tlc.intersect = tlc.intersectBy(tlc.op["==="]);
+tlc.intersect = function() {
+    var args = tlc.concat([tlc.op["==="]], tlc.toArray(arguments));
+    return tlc.apply(tlc.intersectBy, args);
+};
 
 
 module.exports = tlc;

@@ -1,6 +1,6 @@
 "use strict";
 
-var tlc = require("../src/array.js");
+var tlc = require("../src/index.js");
 
 
 describe("array.filter", function() {
