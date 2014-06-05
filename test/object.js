@@ -35,6 +35,20 @@ describe("object.prop", function() {
     });
 });
 
+describe("object.maybeProp", function() {
+    it("should access a property on an object and return a maybe", function() {
+        var o = {"one": 1};
+
+        var exists = tlc.maybeProp("one", o);
+        var doesNotExist = tlc.maybeProp("two", o);
+
+        expect(exists.hasValue).toBe(true);
+        expect(exists.value).toBe(1);
+
+        expect(doesNotExist.hasValue).toBe(false);
+    });
+});
+
 describe("object.propCall", function() {
     it("should call a property on an object", function() {
         var o = {

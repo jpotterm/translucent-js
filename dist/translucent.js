@@ -481,6 +481,16 @@ tlc.prop = function(propertyName, obj) {
     return obj[propertyName];
 };
 
+tlc.maybeProp = function(propertyName, obj) {
+    var result = obj[propertyName];
+
+    if (result === undefined) {
+        return new tlc.Maybe(false);
+    } else {
+        return new tlc.Maybe(true, result);
+    }
+};
+
 tlc.propCall = function(propertyName, args, obj) {
     return obj[propertyName].apply(obj, args);
 };
@@ -637,13 +647,7 @@ tlc.getInstanceFunc = function(type, functionName) {
     var maybeInstance = tlc.getInstance(type);
 
     if (maybeInstance.hasValue) {
-        var f = maybeInstance.value.implementation[functionName];
-
-        if (f === undefined) {
-            return new tlc.Maybe(false);
-        } else {
-            return new tlc.Maybe(true, f);
-        }
+        return tlc.maybeProp(functionName, maybeInstance.value.implementation);
     } else {
         return maybeInstance;
     }
