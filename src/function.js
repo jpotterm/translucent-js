@@ -36,7 +36,7 @@ tlc.partial = function() {
     var partialArgs = args.slice(1);
 
     return function () {
-        return tlc.apply(f, tlc.concat(partialArgs, tlc.toArray(arguments)));
+        return tlc.apply(f, tlc.append(partialArgs, tlc.toArray(arguments)));
     };
 };
 

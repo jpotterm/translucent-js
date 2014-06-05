@@ -172,9 +172,9 @@ describe("array.sort", function() {
     });
 });
 
-describe("array.flatten", function() {
+describe("array.concat", function() {
     it("should flatten the 2d array", function() {
-        var result = tlc.flatten([[1, 2], [3, 4]]);
+        var result = tlc.concat([[1, 2], [3, 4]]);
 
         expect(result[0]).toBe(1);
         expect(result[1]).toBe(2);

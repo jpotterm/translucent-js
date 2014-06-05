@@ -47,9 +47,9 @@ describe("core.apply", function() {
     });
 });
 
-describe("core.concat", function() {
-    it("should concatenate all the arrays together", function() {
-        var result = tlc.concat([1, 2], [3, 4], [5, 6]);
+describe("core.append", function() {
+    it("should append all the arrays together", function() {
+        var result = tlc.append([1, 2], [3, 4], [5, 6]);
         expect(result[4]).toBe(5);
     });
 });

@@ -24,11 +24,11 @@ tlc.unique = function(xs) {
 
 tlc.unionBy = function(eq) {
     var collections = tlc.toArray(arguments).slice(1);
-    return tlc.uniqueBy(eq, tlc.flatten(collections));
+    return tlc.uniqueBy(eq, tlc.concat(collections));
 };
 
 tlc.union = function() {
-    var args = tlc.concat([tlc.op["==="]], tlc.toArray(arguments));
+    var args = tlc.append([tlc.op["==="]], tlc.toArray(arguments));
     return tlc.apply(tlc.unionBy, args);
 };
 
@@ -53,7 +53,7 @@ tlc.intersectBy = function(eq, collection1) {
 };
 
 tlc.intersect = function() {
-    var args = tlc.concat([tlc.op["==="]], tlc.toArray(arguments));
+    var args = tlc.append([tlc.op["==="]], tlc.toArray(arguments));
     return tlc.apply(tlc.intersectBy, args);
 };
 

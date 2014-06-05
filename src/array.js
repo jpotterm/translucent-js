@@ -9,7 +9,7 @@ tlc.toArray = function(xs) {
 
 tlc.cloneArray = tlc.toArray;
 
-tlc.concat = function() {
+tlc.append = function() {
     var args = tlc.toArray(arguments);
 
     return args[0].concat.apply(args[0], args.slice(1));
@@ -36,11 +36,11 @@ tlc.reduceRight = function(f, initVal, xs) {
 };
 
 tlc.filter = function(p, xs) {
-    function concatIfPasses(xs, y) {
-        return p(y) ? tlc.concat(xs, [y]) : xs;
+    function appendIfPasses(xs, y) {
+        return p(y) ? tlc.append(xs, [y]) : xs;
     }
 
-    return tlc.reduce(concatIfPasses, [], xs);
+    return tlc.reduce(appendIfPasses, [], xs);
 };
 
 tlc.findIndex = function(p, xs) {
@@ -149,8 +149,8 @@ tlc.sort = function(xs) {
     return tlc.cloneArray(xs).sort();
 };
 
-tlc.flatten = function(xss) {
-    return tlc.apply(tlc.concat, xss);
+tlc.concat = function(xss) {
+    return tlc.apply(tlc.append, xss);
 };
 
 tlc.some = function(p, xs) {
