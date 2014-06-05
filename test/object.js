@@ -16,6 +16,17 @@ describe("object.extend", function() {
     });
 });
 
+describe("object.cloneObject", function() {
+    it("should create a copy of an object", function() {
+        var a = {one: 1, two: 2};
+        var b = tlc.cloneObject(a);
+        a.one = 3;
+
+        expect(b.one).toBe(1);
+        expect(b.two).toBe(2);
+    });
+});
+
 describe("object.prop", function() {
     it("should access a property on an object", function() {
         var o = {"one": 1};

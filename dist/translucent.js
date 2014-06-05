@@ -473,6 +473,10 @@ tlc.extend = function(x, y) {
     return result;
 };
 
+tlc.cloneObject = function(x) {
+    return tlc.extend({}, x);
+};
+
 tlc.prop = function(propertyName, obj) {
     return obj[propertyName];
 };
