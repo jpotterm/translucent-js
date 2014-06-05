@@ -38,18 +38,8 @@ describe("function.partial", function() {
     });
 });
 
-describe("function.pipeline", function() {
-    it("should compose functions from right to left", function() {
-        function plusTwo(n) {return n + 2;}
-        function timesFour(n) {return n * 4;}
-
-        var piped = tlc.pipeline(plusTwo, timesFour);
-        expect(piped(1)).toBe(12);
-    });
-});
-
 describe("function.compose", function() {
-    it("should compose functions from left to right", function() {
+    it("should compose functions in a right-associative manner", function() {
         function plusTwo(n) {return n + 2;}
         function timesFour(n) {return n * 4;}
 

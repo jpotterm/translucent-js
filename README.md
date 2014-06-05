@@ -11,7 +11,7 @@ Translucent adds powerful features from functional programming to JavaScript whi
 
 # Documentation
 
-Documentation is on the [Github wiki](https://github.com/jpotterm/translucent-js/wiki/Documentation).
+Documentation is on the [Github wiki](https://github.com/jpotterm/translucent-js/wiki/API).
 
 
 # Use Cases

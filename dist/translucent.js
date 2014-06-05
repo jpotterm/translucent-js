@@ -266,20 +266,16 @@ tlc.partial = function() {
     };
 };
 
-tlc.pipeline = function() {
+tlc.compose = function() {
     var functions = tlc.toArray(arguments);
 
     return function(x) {
-        for (var i = 0; i < functions.length; ++i) {
+        for (var i = functions.length - 1; i >= 0; --i) {
             x = functions[i](x);
         }
 
         return x;
     };
-};
-
-tlc.compose = function() {
-    return tlc.apply(tlc.pipeline, tlc.reverse(arguments));
 };
 
 tlc.flip = function(f) {
