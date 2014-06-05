@@ -70,6 +70,7 @@ tlc.mapMaybe = tlc.curry(tlc.mapMaybe);
 
 
 // Object
+tlc.lookup = tlc.curry(tlc.lookup);
 tlc.prop = tlc.curry(tlc.prop);
 tlc.propCall = tlc.curry(tlc.propCall);
 

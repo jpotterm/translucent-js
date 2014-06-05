@@ -32,7 +32,7 @@ tlc.getInstanceFunc = function(type, functionName) {
     var maybeInstance = tlc.getInstance(type);
 
     if (maybeInstance.hasValue) {
-        return tlc.maybeProp(functionName, maybeInstance.value.implementation);
+        return tlc.lookup(functionName, maybeInstance.value.implementation);
     } else {
         return maybeInstance;
     }

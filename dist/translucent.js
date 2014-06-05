@@ -383,6 +383,7 @@ tlc.mapMaybe = tlc.curry(tlc.mapMaybe);
 
 
 // Object
+tlc.lookup = tlc.curry(tlc.lookup);
 tlc.prop = tlc.curry(tlc.prop);
 tlc.propCall = tlc.curry(tlc.propCall);
 
@@ -477,11 +478,7 @@ tlc.cloneObject = function(x) {
     return tlc.extend({}, x);
 };
 
-tlc.prop = function(propertyName, obj) {
-    return obj[propertyName];
-};
-
-tlc.maybeProp = function(propertyName, obj) {
+tlc.lookup = function(propertyName, obj) {
     var result = obj[propertyName];
 
     if (result === undefined) {
@@ -489,6 +486,10 @@ tlc.maybeProp = function(propertyName, obj) {
     } else {
         return new tlc.Maybe(true, result);
     }
+};
+
+tlc.prop = function(propertyName, obj) {
+    return obj[propertyName];
 };
 
 tlc.propCall = function(propertyName, args, obj) {
@@ -647,7 +648,7 @@ tlc.getInstanceFunc = function(type, functionName) {
     var maybeInstance = tlc.getInstance(type);
 
     if (maybeInstance.hasValue) {
-        return tlc.maybeProp(functionName, maybeInstance.value.implementation);
+        return tlc.lookup(functionName, maybeInstance.value.implementation);
     } else {
         return maybeInstance;
     }

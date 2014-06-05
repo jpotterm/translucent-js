@@ -22,11 +22,7 @@ tlc.cloneObject = function(x) {
     return tlc.extend({}, x);
 };
 
-tlc.prop = function(propertyName, obj) {
-    return obj[propertyName];
-};
-
-tlc.maybeProp = function(propertyName, obj) {
+tlc.lookup = function(propertyName, obj) {
     var result = obj[propertyName];
 
     if (result === undefined) {
@@ -34,6 +30,10 @@ tlc.maybeProp = function(propertyName, obj) {
     } else {
         return new tlc.Maybe(true, result);
     }
+};
+
+tlc.prop = function(propertyName, obj) {
+    return obj[propertyName];
 };
 
 tlc.propCall = function(propertyName, args, obj) {

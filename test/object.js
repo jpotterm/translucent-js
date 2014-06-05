@@ -27,25 +27,25 @@ describe("object.cloneObject", function() {
     });
 });
 
-describe("object.prop", function() {
-    it("should access a property on an object", function() {
-        var o = {"one": 1};
-
-        expect(tlc.prop("one", o)).toBe(1);
-    });
-});
-
-describe("object.maybeProp", function() {
+describe("object.lookup", function() {
     it("should access a property on an object and return a maybe", function() {
         var o = {"one": 1};
 
-        var exists = tlc.maybeProp("one", o);
-        var doesNotExist = tlc.maybeProp("two", o);
+        var exists = tlc.lookup("one", o);
+        var doesNotExist = tlc.lookup("two", o);
 
         expect(exists.hasValue).toBe(true);
         expect(exists.value).toBe(1);
 
         expect(doesNotExist.hasValue).toBe(false);
+    });
+});
+
+describe("object.prop", function() {
+    it("should access a property on an object", function() {
+        var o = {"one": 1};
+
+        expect(tlc.prop("one", o)).toBe(1);
     });
 });
 
