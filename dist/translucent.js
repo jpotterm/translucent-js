@@ -317,16 +317,23 @@ var tlc = _dereq_("./core.js");
 
 
 // Array
-tlc.addInstance(Array, {
-    map: function(f, xs) {
-       var ys = new Array(xs.length);
+function arrayMap(f, xs) {
+   var ys = new Array(xs.length);
 
-       for (var i = 0; i < xs.length; ++i) {
-           ys[i] = f(xs[i]);
-       }
-
-       return ys;
+   for (var i = 0; i < xs.length; ++i) {
+       ys[i] = f(xs[i]);
    }
+
+   return ys;
+}
+
+tlc.addInstance(Array, {
+    // Functor
+    map: arrayMap,
+
+    // Monoid
+    mempty: [],
+    mappend: tlc.append
 });
 
 tlc.reduce = tlc.curry(tlc.reduce);
@@ -350,17 +357,17 @@ tlc.memoizeBy = tlc.curry(tlc.memoizeBy);
 
 
 // Maybe
-var maybeUnit = function(value) {
+function maybeUnit(value) {
     return new tlc.Maybe(true, value);
-};
+}
 
-var maybeBind = function(maybe, f) {
+function maybeBind(maybe, f) {
     return maybe.hasValue ? f(maybe.value) : maybe;
-};
+}
 
-var maybeAp = function(maybeF, maybeX) {
+function maybeAp(maybeF, maybeX) {
     return maybeF.hasValue ? tlc.map(maybeF.value, maybeX) : maybeF;
-};
+}
 
 tlc.addInstance(tlc.Maybe, {
     // Applicative
@@ -730,7 +737,7 @@ var tlc = _dereq_("../core.js");
 
 tlc.mempty = function(type) {
     var mempty = tlc.getInstanceFunc(type, "mempty").value;
-    return mempty();
+    return mempty;
 };
 
 tlc.mappend = function(x, y) {

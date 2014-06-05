@@ -5,7 +5,7 @@ var tlc = require("../core.js");
 
 tlc.mempty = function(type) {
     var mempty = tlc.getInstanceFunc(type, "mempty").value;
-    return mempty();
+    return mempty;
 };
 
 tlc.mappend = function(x, y) {
