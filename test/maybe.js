@@ -1,6 +1,6 @@
 "use strict";
 
-var tlc = require("../src/maybe.js");
+var tlc = require("../src/index.js");
 
 
 describe("maybe.catMaybes", function() {

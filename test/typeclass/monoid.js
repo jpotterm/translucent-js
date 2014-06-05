@@ -1,6 +1,6 @@
 "use strict";
 
-var tlc = require("../../src/typeclass/monoid.js");
+var tlc = require("../../src/index.js");
 
 
 var originalInstances;

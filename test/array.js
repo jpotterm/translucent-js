@@ -3,6 +3,60 @@
 var tlc = require("../src/index.js");
 
 
+describe("array.toArray", function() {
+    it("should convert arguments to an array", function() {
+        function test() {
+            expect(tlc.toArray(arguments) instanceof Array).toBe(true);
+        }
+
+        test(1, 2, 3);
+    });
+});
+
+describe("array.cloneArray", function() {
+    it("should copy array", function() {
+        var a = [1, 2, 3];
+        var b = tlc.cloneArray(a);
+
+        b[1] = 4;
+
+        expect(a[1]).toBe(2);
+    });
+});
+
+describe("array.append", function() {
+    it("should append all the arrays together", function() {
+        var result = tlc.append([1, 2], [3, 4], [5, 6]);
+        expect(result[4]).toBe(5);
+    });
+});
+
+describe("array.reverse", function() {
+    it("should reverse an array", function() {
+        var result = tlc.reverse([1, 2, 3]);
+
+        expect(result[0]).toBe(3);
+        expect(result[1]).toBe(2);
+        expect(result[2]).toBe(1);
+    });
+});
+
+describe("array.reduce", function() {
+    it("should reduce (fold) an array using the given function and accumulator", function() {
+        var result = tlc.reduce(tlc.op["-"], 10, [1, 2, 3]);
+
+        expect(result).toBe(4);
+    });
+});
+
+describe("array.reduceRight", function() {
+    it("should reduce (fold) an array starting from the right", function() {
+        var result = tlc.reduceRight(tlc.op["-"], 10, [1, 2, 3]);
+
+        expect(result).toBe(-8);
+    });
+});
+
 describe("array.filter", function() {
     it("should remove elements that don't pass the predicate", function() {
         function odd(n) {return n % 2 !== 0;}

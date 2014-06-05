@@ -1,6 +1,7 @@
 "use strict";
 
-var tlc = require("../src/set.js");
+var tlc = require("../src/index.js");
+
 
 function bothEvenOdd(x, y) {
     return x % 2 === y % 2;
