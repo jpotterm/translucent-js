@@ -52,16 +52,8 @@ function maybeBind(maybe, f) {
     return maybe.hasValue ? f(maybe.value) : maybe;
 }
 
-function maybeAp(maybeF, maybeX) {
-    return maybeF.hasValue ? tlc.map(maybeF.value, maybeX) : maybeF;
-}
-
 tlc.addInstance(tlc.Maybe, {
-    // Applicative
-    pure: maybeUnit,
-    ap: maybeAp,
-
-    // Monad and Functor
+    // Monad, Applicative, and Functor
     unit: maybeUnit,
     bind: maybeBind
 });
@@ -97,7 +89,6 @@ tlc.intersect = tlc.curry(tlc.intersect, 2);
 
 
 // Applicative
-tlc.pure = tlc.curry(tlc.pure);
 tlc.ap = tlc.curry(tlc.ap);
 
 

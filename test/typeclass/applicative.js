@@ -3,15 +3,6 @@
 var tlc = require("../../src/index.js");
 
 
-describe("applicative.pure", function() {
-    it("should wrap a value in an applicative", function() {
-        var maybe = tlc.pure(tlc.Maybe, 1);
-
-        expect(maybe.hasValue).toBe(true);
-        expect(maybe.value).toBe(1);
-    });
-});
-
 describe("applicative.ap", function() {
     it("should apply a function within a functor to the value inside a functor", function() {
         function plusOne(n) {return n + 1;}

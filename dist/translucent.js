@@ -361,16 +361,8 @@ function maybeBind(maybe, f) {
     return maybe.hasValue ? f(maybe.value) : maybe;
 }
 
-function maybeAp(maybeF, maybeX) {
-    return maybeF.hasValue ? tlc.map(maybeF.value, maybeX) : maybeF;
-}
-
 tlc.addInstance(tlc.Maybe, {
-    // Applicative
-    pure: maybeUnit,
-    ap: maybeAp,
-
-    // Monad and Functor
+    // Monad, Applicative, and Functor
     unit: maybeUnit,
     bind: maybeBind
 });
@@ -406,7 +398,6 @@ tlc.intersect = tlc.curry(tlc.intersect, 2);
 
 
 // Applicative
-tlc.pure = tlc.curry(tlc.pure);
 tlc.ap = tlc.curry(tlc.ap);
 
 
@@ -675,14 +666,22 @@ module.exports = tlc;
 var tlc = _dereq_("../core.js");
 
 
-tlc.pure = function(type, value) {
-    var pure = tlc.getInstanceFunc(type, "pure").value;
-    return pure(value);
-};
+tlc.ap = function(applicativeF, applicativeX) {
+    var type = applicativeF.constructor;
+    var maybeAp = tlc.getInstanceFunc(type, "ap");
 
-tlc.ap = function(maybeF, maybeX) {
-    var ap = tlc.getInstanceFunc(maybeF.constructor, "ap").value;
-    return ap(maybeF, maybeX);
+    if (maybeAp.hasValue) {
+        return maybeAp.value(applicativeF, applicativeX);
+    } else {
+        // Fall back to Monad
+        var convertF = function(f) {
+            return tlc.compose(tlc.unit(type), f);
+        };
+
+        var convertedF = tlc.bind(applicativeF, convertF);
+
+        return tlc.bind(applicativeX, convertedF);
+    }
 };
 
 
@@ -715,9 +714,8 @@ tlc.map = function(f, functor) {
     if (maybeMap.hasValue) {
         return maybeMap.value(f, functor);
     } else {
-        // If a map implementation is not registered, fall back to unit and bind
-        var unit = tlc.unit(type);
-        return tlc.bind(functor, tlc.compose(unit, f));
+        // Fall back to Applicative (unit and ap)
+        return tlc.ap(tlc.unit(type, f), functor);
     }
 };
 

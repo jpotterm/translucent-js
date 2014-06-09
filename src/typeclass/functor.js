@@ -10,9 +10,8 @@ tlc.map = function(f, functor) {
     if (maybeMap.hasValue) {
         return maybeMap.value(f, functor);
     } else {
-        // If a map implementation is not registered, fall back to unit and bind
-        var unit = tlc.unit(type);
-        return tlc.bind(functor, tlc.compose(unit, f));
+        // Fall back to Applicative (unit and ap)
+        return tlc.ap(tlc.unit(type, f), functor);
     }
 };
 

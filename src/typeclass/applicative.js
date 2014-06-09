@@ -3,14 +3,22 @@
 var tlc = require("../core.js");
 
 
-tlc.pure = function(type, value) {
-    var pure = tlc.getInstanceFunc(type, "pure").value;
-    return pure(value);
-};
+tlc.ap = function(applicativeF, applicativeX) {
+    var type = applicativeF.constructor;
+    var maybeAp = tlc.getInstanceFunc(type, "ap");
 
-tlc.ap = function(maybeF, maybeX) {
-    var ap = tlc.getInstanceFunc(maybeF.constructor, "ap").value;
-    return ap(maybeF, maybeX);
+    if (maybeAp.hasValue) {
+        return maybeAp.value(applicativeF, applicativeX);
+    } else {
+        // Fall back to Monad
+        var convertF = function(f) {
+            return tlc.compose(tlc.unit(type), f);
+        };
+
+        var convertedF = tlc.bind(applicativeF, convertF);
+
+        return tlc.bind(applicativeX, convertedF);
+    }
 };
 
 
