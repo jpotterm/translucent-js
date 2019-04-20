@@ -1,6 +1,7 @@
 {
     "name": "translucent",
     "description": "A functional programming library that supports typeclasses.",
+    "main": "src/index.js",
     "license": "CC0",
     "ignore": [
         "src/",
